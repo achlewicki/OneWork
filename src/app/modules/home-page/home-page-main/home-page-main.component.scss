@@ -1,0 +1,33 @@
+.container {
+  height: 100%;
+  //background:  black;
+  overflow-x: hidden;
+
+  .nav-bar {
+    height: auto;
+  }
+
+  .content {
+    margin-top: 30px;
+    display: flex;
+    //align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+
+    .particles-wrapper {
+      width: 100%;
+      position: absolute;
+      z-index: -1;
+      bottom: 0;
+      top: 0;
+    }
+
+
+    router-outlet {
+      z-index: 1;
+      position: absolute;
+    }
+    //border: green solid 1px;
+  }
+}

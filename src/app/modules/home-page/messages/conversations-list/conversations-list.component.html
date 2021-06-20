@@ -1,0 +1,27 @@
+<div class="receivers-container" *ngIf="this.receivers !== undefined && !this.control" fxLayout="column">
+  <mat-form-field appearance="standard">
+    <label>
+      <input matInput placeholder="Wyszukaj odbiorcę..."
+             [formControl]="this.receiversControl"
+             autocomplete="off"/>
+    </label>
+  </mat-form-field>
+  <ng-container *ngFor="let receiver of this.receivers; index as i">
+    <div class="single-receiver-container" fxLayout="row" fxLayoutGap="10px"
+         *ngIf="receiver !== undefined && this.isContaing(receiver.name + ' ' + receiver.surname)"
+         (click)="this.setReceiver(receiver)"
+         [ngClass]="this.activeReceiverId === receiver.documentId ? 'active' : 'inactive'">
+      <img class="avatar" alt="photo" [src]="receiver.photoUrl || ''">
+      <div class="receiver-info-and-message" fxLayout="column">
+        <p class="receiver-info">{{receiver.name}} {{receiver.surname}}</p>
+        <div class="last-message" *ngIf="this.lastMessages[i] != undefined">
+          <p *ngIf="this.lastMessages[i].senderOrReceiver ==='sender'">Ty: {{this.lastMessages[i].content.length > 20 ? (this.lastMessages[i].content.slice(0, 20) + '...') : this.lastMessages[i].content}}
+            &#8231; {{this.setDateDisplay(this.lastMessages[i].date)}}</p>
+          <p *ngIf="this.lastMessages[i].senderOrReceiver ==='receiver'">{{this.lastMessages[i].content.length > 20 ? (this.lastMessages[i].content.slice(0, 20) + '...') : this.lastMessages[i].content}}
+            &#8231; {{this.setDateDisplay(this.lastMessages[i].date)}}</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+

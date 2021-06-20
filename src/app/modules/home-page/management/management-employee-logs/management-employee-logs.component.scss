@@ -1,0 +1,67 @@
+.logs {
+  padding-bottom: 10px;
+  overflow-y: scroll;
+  height: 720px;
+  &::-webkit-scrollbar { // Chrome
+    display: none;
+  }
+  -ms-overflow-style: none;  /* IE i Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  p {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+  .log-in, .log-out {
+    width: 90px;
+  }
+
+  .send {
+    width: 60px;
+  }
+
+  .no-answers {
+    width: 114px;
+  }
+
+  .percentage {
+    width: 54px;
+  }
+
+  .average-time {
+    width: 86px;
+  }
+
+
+  .date-titles-divider {
+    margin-top: 24px;
+
+    .date {
+      font-family: 'Nunito', sans-serif;
+      font-style: italic;
+      font-size: 14px;
+      color: #A7A7A7;
+    }
+
+    .titles {
+      padding: 4px 10px;
+      margin-bottom: 6px;
+      .title {
+        font-weight: 700;
+        font-family: 'Nunito', sans-serif;
+        font-size: 15px;
+      }
+    }
+
+  }
+
+  .single-log {
+    padding: 4px 10px;
+    align-items: center;
+  }
+
+  .even {
+    background-color: rgba(240,240,240,0.9);;
+  }
+}

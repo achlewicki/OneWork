@@ -1,0 +1,9 @@
+<div class="canvas-container" *ngIf="this.dataLoaded">
+  <canvas baseChart
+          [data]="this.pieData"
+          [labels]="this.pieLabels"
+          [options]="this.pieOptions"
+          [legend]="true"
+          [chartType]="this.chartType">
+  </canvas>
+</div>

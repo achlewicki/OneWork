@@ -1,0 +1,105 @@
+<div fxLayout="column" fxLayoutGap="20px" *ngIf="this.companyEditForm != undefined">
+  <div fxLayoutAlign="center">
+    <fa-icon [size]="'8x'" [icon]="this.companyIcon"></fa-icon>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <h3>Edytuj informacje o firmie</h3>
+    <fa-icon [icon]="editIcon" [size]="'3x'" class="edit-icon"
+             (click)="this.updateCompanyInfo()"
+             [hidden]="(!this.companyEditForm.get('name').dirty && !this.companyEditForm.get('mail').dirty
+                        && !this.companyEditForm.get('phone').dirty && !this.companyEditForm.get('address').controls.street.dirty
+                        && !this.companyEditForm.get('address').controls.city.dirty && !this.companyEditForm.get('address').controls.state.dirty
+                        && !this.companyEditForm.get('address').controls.zip_code.dirty)
+                        || !this.companyEditForm.valid"></fa-icon>
+  </div>
+
+  <form fxLayout="column" [formGroup]="this.companyEditForm" fxLayoutGap="20px">
+    <div fxLayout="row" fxLayoutAlign="space-between" >
+      <mat-form-field appearance="legacy" autocomplete="off">
+        <mat-label>Nazwa*</mat-label>
+        <input matInput formControlName="name" placeholder="Nazwa">
+        <mat-error *ngIf="this.companyEditForm.get('name').hasError('required')">Nazwa firmy jest wymagana</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Telefon Kontaktowy*</mat-label>
+        <input matInput formControlName="phone" placeholder="Telefon Kontaktowy" autocomplete="off">
+        <mat-error *ngIf="this.companyEditForm.get('phone').hasError('required')">Telefon kontatkowy jest wymagany</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Email*</mat-label>
+        <input matInput formControlName="mail" placeholder="Email" autocomplete="off">
+        <mat-error *ngIf="this.companyEditForm.get('mail').hasError('required')">Email jest wymagany</mat-error>
+        <mat-error *ngIf="this.companyEditForm.get('mail').hasError('pattern')">Błędny format email (poprawny np. info@firma.pl)</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between" formGroupName="address">
+      <mat-form-field appearance="legacy">
+        <mat-label>Ulica*</mat-label>
+        <input matInput formControlName="street" placeholder="Ulica">
+        <mat-error *ngIf="this.companyEditForm.get('address').controls['street'].hasError('required')">Ulica jest wymagana</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Miejscowość*</mat-label>
+        <input matInput formControlName="city" placeholder="Miejscowość" autocomplete="off">
+        <mat-error *ngIf="this.companyEditForm.get('address').controls['city'].hasError('required')">Miejscowość jest wymagana</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Kod Pocztowy*</mat-label>
+        <input matInput formControlName="zip_code" placeholder="Kod Pocztowy" autocomplete="off">
+        <mat-error *ngIf="this.companyEditForm.get('address').controls['zip_code'].hasError('required')">Kod Pocztowy jest wymagany</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Województwo*</mat-label>
+        <input matInput formControlName="state" placeholder="Województwo" autocomplete="off">
+        <mat-error *ngIf="this.companyEditForm.get('address').controls['state'].hasError('required')">Województwo jest wymagane</mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <h3>Kody do rejestracji</h3>
+  <div *ngIf="this.registrationCodes != undefined" fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="center">
+    <div fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center">
+      <h5 fxFlex="9%">Kod</h5>
+      <h5 fxFlex="18%">Pozostała ilość użyć</h5>
+      <h5 fxFlex="28%">Data ważności</h5>
+      <h5 fxFlex="44%">Ostatnie użycie</h5>
+    </div>
+    <div *ngFor="let code of this.registrationCodes" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center"
+         [ngClass]="code.valid ? 'valid' : 'invalid'"
+         class="code-container">
+      <p fxFlex="10%">{{code.value}}</p>
+      <p fxFlex="5%">{{code.remaining_number_of_times_to_use}}</p>
+      <p fxFlex="20%">{{code.expires_after.toDate() | date : 'dd MMMM yyyy'}}</p>
+      <p fxFlex="25%">{{code.last_use != undefined ? (code.last_use.toDate() | date : 'dd MMM yyyy HH:mm:ss') : 'Kod niezostał jeszcze użyty'}}</p>
+      <fa-icon *ngIf="!code.valid" class="invalid-icon" [icon]="this.invalidIcon" [size]="'2x'"></fa-icon>
+      <fa-icon *ngIf="code.valid" class="valid-icon" [icon]="this.validIcon" [size]="'2x'"></fa-icon>
+      <fa-icon class="delete-icon" [icon]="deleteIcon" [size]="'2x'" (click)="this.deleteRegistrationCode(code.documentId)"></fa-icon>
+    </div>
+  </div>
+
+  <h3 *ngIf="this.registrationCodes != undefined && this.registrationCodes.length < 3">Dodaj nowy Kod do rejestracji</h3>
+  <form *ngIf="this.registrationCodes != undefined && this.registrationCodes.length < 3" fxLayout="row" fxLayoutAlign="space-around" [formGroup]="this.newRegistrationCodeForm">
+    <mat-form-field appearance="legacy">
+      <mat-label>Ważność*</mat-label>
+      <input matInput readonly formControlName="expires_after" [min]="this.tomorrowDate" [matDatepicker]="picker" autocomplete="off" placeholder="Województwo">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker disabled="false" #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="legacy">
+      <mat-label>Ilość użyć* (1-10)</mat-label>
+      <input type="number" min="1" max="10" matInput formControlName="remaining_number_of_times_to_use" placeholder="Województwo">
+    </mat-form-field>
+
+    <div class="custom-button-wrapper">
+      <button class="custom-button" (click)="this.addNewRegistrationCode()">Wygeneruj</button>
+    </div>
+
+  </form>
+</div>

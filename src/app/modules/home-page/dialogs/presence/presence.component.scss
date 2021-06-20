@@ -1,0 +1,35 @@
+.container {
+  padding: 0;
+  margin: 0;
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .header-container {
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(#2474FF, white) ;
+    border-radius: 2px;
+    text-align: center;
+
+    p {
+      font-family: 'Nunito', sans-serif;
+      font-size: 32px;
+      font-weight: 600;
+      padding: 20px;
+    }
+  }
+
+  .info {
+    font-family: 'Nunito', sans-serif;
+    font-size: 18px;
+  }
+
+  .counter {
+    font-family: 'RocknRoll One', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: #2474FF;
+  }
+}

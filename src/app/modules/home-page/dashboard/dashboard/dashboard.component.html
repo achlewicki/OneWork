@@ -1,0 +1,104 @@
+<div class="container" fxLayout="row" fxFlexAlign="center" fxLayoutGap="30px">
+  <div fxLayout="column" fxFlexAlign="center" fxLayoutGap="30px">
+    <div fxLayout="column" class="box-shadow">
+      <div class="welcome-part" fxLayout="row wrap" fxLayoutAlign="center center">
+        <p>Witaj&nbsp;</p>
+        <p class="name-surname"> {{this.sharedData.employeeDetails.name}} {{this.sharedData.employeeDetails.surname}}</p>
+      </div>
+
+      <div class="date-part" fxLayout="column" fxLayoutAlign="center center">
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px">
+          <p class="clock">{{this.date | date : 'HH:mm:ss'}}</p>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+          <fa-icon [size]="'2x'" [icon]="this.calendarIcon"></fa-icon>
+          <p class="full-date">{{this.date | date : 'dd.MM.yyyy'}}</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px">
+      <div class="activity-part box-shadow">
+        <h2>Twoja dzisiejsza aktywność</h2>
+        <div class="date-titles-divider" fxLayout="column"  fxLayoutAlign="center center">
+          <div class="titles" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
+            <p class="log-in title">Zalogowano</p>
+            <p class="log-out title">Wylogowano</p>
+            <p class="send title">Wysłano</p>
+            <p class="no-answers title">Nieopowiedziano</p>
+          </div>
+        </div>
+        <div fxLayout="column" fxLayoutAlign="start center" *ngFor="let log of this.recentLogs; index as i">
+          <div class="single-log" [ngClass]="i % 2 ? 'even' : 'odd'" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="16px">
+            <p class="log-in element">{{log.log_in.toDate() | date : 'HH:mm:ss'}}</p>
+            <p class="log-out element">{{log.log_out.toDate().getSeconds() === log.log_in.toDate().getSeconds() && i===0 ? 'obecnie' : (log.log_out.toDate() | date : 'HH:mm:ss')}}</p>
+            <p class="send element">{{log.sent_queries}}</p>
+            <p class="no-answers element">{{log.no_answers_total}}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="employee-places" *ngIf="this.places && this.employees" fxLayout="column" fxLayoutGap="20px">
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div class="place-square box-shadow" fxLayout="column" fxLayoutAlign="start center">
+            <p class="place-title" fxFlex="20%">Skuteczność</p>
+              <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80%">
+                <p class="place">#{{this.places.effectivenessPlace}}</p>
+                <p class="of-employees"> / {{this.employees.length}}</p>
+              </div>
+            </div>
+            <div class="place-square box-shadow" fxLayout="column" fxLayoutAlign="start center">
+              <p class="place-title" fxFlex="20%">Top3</p>
+              <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80%">
+                <p class="place">#{{this.places.top3Place}}</p>
+                <p class="of-employees"> / {{this.employees.length}}</p>
+              </div>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutGap="20px">
+          <div class="place-square box-shadow" fxLayout="column" fxLayoutAlign="start center">
+            <p class="place-title" fxFlex="20%">Top10</p>
+            <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80%">
+              <p class="place">#{{this.places.top10Place}}</p>
+              <p class="of-employees"> / {{this.employees.length}}</p>
+            </div>
+          </div>
+          <div class="place-square box-shadow" fxLayout="column" fxLayoutAlign="start center">
+            <p class="place-title" fxFlex="20%">Bottommost</p>
+            <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80%">
+              <p class="place">#{{this.places.bottommostPlace}}</p>
+              <p class="of-employees"> / {{this.employees.length}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="projects box-shadow" *ngIf="this.projectsLoaded && this.filesCounter" fxLayout="column" fxLayoutGap="10px">
+    <h2 style="text-align: center; margin: 0; padding: 0">Aktywne projekty w których uczestniczysz:</h2>
+    <div *ngFor="let project of this.projects">
+      <div *ngIf="project.status === 'Aktywny' && project.decColor"
+           fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px"
+           class="single-project"
+           [ngStyle]="{'background': 'linear-gradient(rgba(' + project.decColor[0] + ',' + project.decColor[1] + ',' + project.decColor[2] + ',0.3),' +
+                                      'rgba(' + project.decColor[0] + ',' + project.decColor[1] + ',' + project.decColor[2] + ',0.2))'}">
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxLayout="column">
+            <p class="project-title">{{project.title}}</p>
+            <p class="project-description">{{project.description.length > 30 ? (project.description.slice(0, 30) + '...') : project.description}}</p>
+          </div>
+          <p class="project-files">Pliki: {{this.findNumberOfFiles(project.documentId)}}</p>
+        </div>
+        <p class="after-deadline" *ngIf="project.end_date.seconds <= this.today2.seconds">
+          Termin przekroczony o {{this.calculateDeadlineDays(this.today2.seconds - project.end_date.seconds)}}!!!
+        </p>
+        <p class="before-deadline" *ngIf="project.end_date.seconds > this.today2.seconds">
+          Termin mija za {{this.calculateDeadlineDays( project.end_date.seconds - this.today2.seconds)}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

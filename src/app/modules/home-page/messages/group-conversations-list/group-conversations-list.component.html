@@ -1,0 +1,31 @@
+<div class="container" fxLayout="column" *ngIf="this.groups" fxLayoutGap="10px">
+  <div fxLayout="row" fxLayoutAlign="space-around center">
+      <label *ngIf="this.groups && this.groups.length > 0">
+        <input matInput placeholder="Wyszukaj grupę..."
+               [formControl]="this.groupsControl"
+               autocomplete="off"/>
+      </label>
+    <a *ngIf="this.canCreateMoreGroups()" (click)="this.createGroup()">
+      <fa-icon [icon]="this.addGroupIcon" [size]="'2x'"></fa-icon>
+    </a>
+  </div>
+  <ng-container  *ngFor="let group of this.groups; index as i">
+    <div class="single-group" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between center"
+         *ngIf="group !== undefined && isContaing(group.name)"
+         (click)="this.setGroup(group)"
+         [ngClass]="this.activeGroup === group.documentId ? 'active' : 'inactive'">
+      <div class="group-info-and-message" fxLayout="column">
+        <p class="group-info">{{group.name}}</p>
+        <div class="last-message" *ngIf="group.lastMessage">
+          <p *ngIf="group.lastMessage.sender === this.sharedData.employeeDetails.documentId">Ty: {{group.lastMessage.content.length > 20 ? (group.lastMessage.content.slice(0, 20) + '...') : group.lastMessage.content}}
+            &#8231; {{this.setDateDisplay(group.lastMessage.date)}}</p>
+          <p *ngIf="group.lastMessage.sender !== this.sharedData.employeeDetails.documentId">{{group.lastMessage.content.length > 20 ? (group.lastMessage.content.slice(0, 20) + '...') : group.lastMessage.content}}
+            &#8231; {{this.setDateDisplay(group.lastMessage.date)}}</p>
+        </div>
+      </div>
+      <a *ngIf="this.canManageGroup(group.documentId)" (click)="this.editGroup(group)">
+        <fa-icon [icon]="this.editGroupIcon" [size]="'2x'"></fa-icon>
+      </a>
+    </div>
+  </ng-container>
+</div>

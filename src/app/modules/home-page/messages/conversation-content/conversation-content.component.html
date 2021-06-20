@@ -1,0 +1,27 @@
+<div class="container" fxLayout="column" *ngIf="receiver != undefined && sender != undefined && this.dataUpdate">
+  <div class="top-part" fxLayout="row">
+    <div class="receiver-part" fxLayout="row" fxLayoutGap="10px">
+      <img class="avatar" alt="photo" [src]="receiver.photoUrl || ''">
+      <p class="receiver-info">{{receiver.name}} {{receiver.surname}}</p>
+    </div>
+    <div class="slide-toggle">
+      <mat-slide-toggle  [checked]="this.scrolling" (change)="toggle($event)">
+        Autoscrolling
+      </mat-slide-toggle>
+    </div>
+  </div>
+  <div class="content" fxLayout="column" id="content">
+    <ng-container *ngFor="let message of this.conversation, index as i">
+      <p class="message-date" *ngIf="i == 0 || this.isItAnotherDay(this.conversation[i-1].date, this.conversation[i].date)">
+        {{this.setDateDisplay(message.date)}}
+      </p>
+      <div class="message" [ngStyle]="{'justify-content': message.senderOrReceiver === 'receiver' ? 'flex-start' : 'flex-end'}">
+        <p class="message-inner" matTooltip="{{message.date.toDate() | date :'HH:mm:ss'}}"
+           [matTooltipPosition]="'above'"
+           [ngClass]="message.senderOrReceiver === 'receiver' ? 'receiver-message' : 'sender-message'">
+          {{message.content}}</p>
+      </div>
+    </ng-container>
+  </div>
+</div>
+

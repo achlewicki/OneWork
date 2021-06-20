@@ -1,0 +1,66 @@
+.container {
+  height: 630px;
+  overflow-y: auto;
+  &::-webkit-scrollbar { // Chrome
+    display: none;
+  }
+  -ms-overflow-style: none;  /* IE i Edge */
+  scrollbar-width: none;  /* Firefox */
+
+  fa-icon {
+    color: #C2C2C2;
+    cursor: pointer;
+    transition: 0.4s;
+    &:hover {
+      color: #00B11A;
+      transition: 0.4s;
+    }
+  }
+
+  p {
+    padding: 0;
+    margin: 0;
+  }
+
+  .single-group {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 12px;
+
+    .avatar {
+      background-color: #69C862;
+      height: 60px;
+      width: 60px;
+      border-radius: 100%;
+    }
+
+    .group-info-and-message {
+      font-family: 'Arial', sans-serif;
+
+      padding: 4px 8px;
+      .mem-info-info {
+        font-size: 14px;
+        //width: 100%;
+        padding: 4px 0;
+        font-weight: bold;
+      }
+
+      .last-message {
+        color: #A7A7A7;
+        font-size: 12px;
+        width: 100%;
+        padding: 4px 0;
+      }
+    }
+  }
+
+  .active {
+    background-color: rgba(240,240,240,0.9);
+    transition: 0.8s;
+  }
+
+  .inactive {
+    background-color: white;
+    transition: 0.2s;
+  }
+}

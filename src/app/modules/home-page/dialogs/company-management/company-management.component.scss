@@ -1,0 +1,45 @@
+.edit-icon {
+  color: rgba(210,210,210, 0.8)
+}
+
+.delete-icon {
+  color:rgba(180,180,180,0.8)
+}
+
+.delete-icon:hover, .delete-icon:focus {
+  color: rgba(255,0,0,0.7);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.edit-icon:hover, .edit-icon:focus {
+  color: rgba(0,150,0, 0.8);
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.valid-icon {
+  color: #159B0B;
+}
+
+.invalid-icon {
+  color: darkred;
+}
+
+
+.code-container {
+  border-radius: 10px;
+  padding: 10px;
+  p {
+    font-family: 'Nunito', sans-serif;
+  }
+}
+
+.valid {
+  background-color: rgba(0,230,0,0.3);
+}
+
+.invalid {
+  background-color: rgba(230,0,0,0.3);
+}
+

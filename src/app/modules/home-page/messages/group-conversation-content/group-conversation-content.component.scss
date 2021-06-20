@@ -1,0 +1,106 @@
+.container {
+  width: 700px;
+  height: 650px;
+  padding-bottom: 10px;
+
+  .top-part {
+    padding: 4px 8px 8px 8px;
+    justify-content: space-between;
+    .member-part {
+      .avatar {
+        width: 26px;
+        height: 26px;
+        border-radius: 100%;
+        background-color: #130BA5;
+      }
+      .member-info {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+      }
+    }
+
+    .slide-toggle {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+
+
+  .content {
+    width: 680px;
+    height: 630px;
+    overflow-y: scroll;
+    margin-left: 10px;
+    border-radius: 12px;
+    box-shadow: 0 0 6px  rgba(250,250,250,0.6) inset;
+
+    fa-icon {
+      color: #2474FF;
+      align-self: center;
+      justify-self: center;
+      cursor: pointer;
+    }
+
+    &::-webkit-scrollbar { // Chrome
+      display: none;
+    }
+    -ms-overflow-style: none;  /* IE i Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    .message-date {
+      color: #A7A7A7;
+      font-size: 10px;
+      font-style: italic;
+      font-family: 'Arial', sans-serif;
+      width: 100%;
+      text-align: center;
+    }
+
+    .message {
+      width: 100%!important;
+      height: auto;
+      display: flex;
+      flex-direction: row;
+      margin-bottom: 4px;
+      align-items: center;
+
+      .photo {
+        border-radius: 100%;
+        width: 24px;
+        height: 24px;
+      }
+
+      .message-inner {
+        padding: 6px 10px;
+        margin: 0;
+        text-overflow: ellipsis;
+        border-radius: 12px;
+        background-color: white;
+        max-width: 45%;
+        height: auto;
+        word-break: break-word;
+        text-justify: inter-word;
+      }
+
+      .receiver-message {
+        margin-left: 6px;
+        background-color: #F7F7F7;
+        text-align: left;
+        font-size: 14px;
+      }
+
+      .sender-message {
+        background-color: #2682F9;
+        color: white;
+        margin-right: 10px;
+        font-size: 15px;
+        text-align: right;
+      }
+    }
+  }
+}
+

@@ -1,0 +1,35 @@
+.employees-members-container {
+  .photo {
+    width: 26px;
+    height: 26px;
+    border-radius: 100%;
+  }
+
+  padding: 0 10px;
+  margin-top: 10px;
+
+  .font-p {
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    color: black;
+    padding: 4px 4px 4px 0;
+    margin: 0;
+  }
+
+  .single-employee, .single-member{
+    padding: 8px 14px;
+    margin-top: 8px;
+  }
+
+  .single-employee:hover, .single-member:hover {
+    border-radius: 12px;
+    background: rgba(230,230,230,0.8);
+    cursor: pointer;
+  }
+  .line {
+    margin-top: 24px;
+    border-radius: 6px;
+    width: 6px;
+    background: rgba(230,230,230,0.8)
+  }
+}

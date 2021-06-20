@@ -1,0 +1,181 @@
+@import url('https://fonts.googleapis.com/css2?family=Antonio:wght@600&display=swap');
+
+.container {
+  margin-top: 20px;
+  p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .box-shadow {
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .welcome-part {
+    font-family: 'Nunito', sans-serif;
+    font-size: 30px;
+
+
+    .name-surname {
+      font-weight: 700;
+      //font-style: italic;
+    }
+  }
+
+  .date-part {
+    fa-icon {
+      color: #C2C2C2;
+    }
+
+    .full-date {
+      font-family: 'Antonio', sans-serif;
+      color: #2474FF;
+      font-size: 34px;
+      padding: 10px;
+      font-weight: 800;
+      //color: ;
+    }
+
+    .clock {
+      width: 630px;
+      //text-align: center;
+      font-family: 'Antonio', sans-serif;
+      font-size: 200px;
+      color: #2474FF;
+      font-weight: 800;
+      padding: 10px
+    }
+  }
+
+  .activity-part {
+    //padding-bottom: 10px;
+    overflow-y: scroll;
+    height: 380px;
+    &::-webkit-scrollbar { // Chrome
+      display: none;
+    }
+    -ms-overflow-style: none;  /* IE i Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    p {
+      padding: 0;
+      margin: 0;
+      text-align: center;
+    }
+    .log-in, .log-out {
+      width: 90px;
+    }
+
+    .send {
+      width: 60px;
+    }
+
+    .no-answers {
+      width: 114px;
+    }
+
+    .date-titles-divider {
+      margin-top: 24px;
+
+      .titles {
+        padding: 4px 10px;
+        margin-bottom: 6px;
+        .title {
+          font-weight: 700;
+          font-family: 'Nunito', sans-serif;
+          font-size: 15px;
+        }
+      }
+
+    }
+
+    .single-log {
+      padding: 4px 10px;
+      //border-radius: 10px;
+      align-items: center;
+    }
+
+    .even {
+      background-color: rgba(240,240,240,0.9);;
+    }
+  }
+
+  .employee-places {
+    .place-square {
+      width: 200px;
+      height: 200px;
+      border-radius: 16px;
+
+      .place-title {
+        font-family: 'Nunito', sans-serif;
+        font-size: 26px;
+        padding-top: 10px;
+        font-weight: 700;
+      }
+
+      .place {
+        font-family: 'RocknRoll One', sans-serif;
+        color: #2474FF;
+        font-size: 60px;
+      }
+
+      .of-employees {
+        color: #A0A0A0;
+        font-size: 22px;
+        font-family: 'RocknRoll One', sans-serif;
+
+      }
+    }
+  }
+
+  .projects {
+    width: 400px;
+    overflow-y: scroll;
+    &::-webkit-scrollbar { // Chrome
+      display: none;
+    }
+    -ms-overflow-style: none;  /* IE i Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    .single-project {
+      width: 100%;
+      //margin: 0 10px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+
+      .project-title{
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .project-description {
+        font-size: 18px;
+        font-weight: 500;
+      }
+
+      .project-files {
+        width: 70px;
+        font-size: 18px;
+        font-weight: 800;
+      }
+
+      .after-deadline, .before-deadline {
+        font-style: italic;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .after-deadline {
+        color: red;
+      }
+
+      .before-deadline {
+        color: #159B0B;
+      }
+    }
+  }
+}

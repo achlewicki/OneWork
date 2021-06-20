@@ -1,0 +1,55 @@
+<div class="container">
+  <mat-form-field>
+    <mat-label>Sortuj według:</mat-label>
+    <mat-select (selectionChange)="this.sort()" [(ngModel)]="this.sortMode">
+      <mat-option [value]="'effectiveness'">Średnia skuteczność</mat-option>
+      <mat-option [value]="'top3'">TOP 3</mat-option>
+      <mat-option [value]="'top10'">TOP 10</mat-option>
+      <mat-option [value]="'down'">Bottommost</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <h2 style="margin-bottom: 10px; text-align: center">Top Ranking</h2>
+
+  <table mat-table [dataSource]="this.employees" *ngIf="this.displayData">
+
+    <ng-container matColumnDef="position">
+      <th *matHeaderCellDef> Miejsce </th>
+      <td *matCellDef="let employee; index as i">{{i + 1 - this.howManySameScore(i)}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="employee">
+      <th *matHeaderCellDef> Pracownik </th>
+      <td *matCellDef="let employee; " class="custom-td">
+        <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <img class="photo" alt="photo" *ngIf="employee.photoUrl != null" [src]="employee.photoUrl">
+          <p>{{employee.name}} {{employee.surname}}</p>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="effectiveness">
+      <th *matHeaderCellDef> Skuteczność </th>
+      <td *matCellDef="let employee;"> {{employee.current_avg_effectiveness}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="top3">
+      <th *matHeaderCellDef> TOP 3 </th>
+      <td *matCellDef="let employee;"> {{employee.top3}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="top10">
+      <th *matHeaderCellDef> TOP 10 </th>
+      <td *matCellDef="let employee;"> {{employee.top10}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bottommost">
+      <th *matHeaderCellDef> Bottommost </th>
+      <td *matCellDef="let employee;"> {{employee.bottommost}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr class="rows" [ngClass]="i%2 === 0 ? 'even-row' : 'odd-row'" mat-row *matRowDef="let row; columns: displayedColumns; index as i"></tr>
+  </table>
+</div>
+

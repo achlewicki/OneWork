@@ -1,0 +1,62 @@
+<div class="container" fxLayout="row"  fxLayoutAlign="start" fxLayoutGap="300px">
+  <div fxLayout="column" fxLayoutAlign="center center">
+    <h2>Zaktualizuj swoje zdjęcie</h2>
+    <div class="photo-container" fxLayout="column" fxLayoutAlign="center center">
+      <img class="photo" [src]="this.photoUrl || ''" alt="photoUrl">
+      <input class="photo-input" type="file"  accept="image/png" (change)="this.uploadPhoto($event)">
+    </div>
+    <mat-error *ngIf="this.errorInfo">{{this.errorInfo}}</mat-error>
+  </div>
+
+  <div fxLayout="column" fxLayoutGap="50px">
+    <h2>Zaktualizuj swój mail i/lub hasło</h2>
+    <form [formGroup]="this.editForm" fxLayout="row" fxLayoutGap="100px">
+      <div class="current-mail-and-password" fxLayout="column" fxLayoutGap="50px" fxLayoutAlign="center center">
+        <mat-form-field appearance="outline">
+          <mat-label>Obecny mail</mat-label>
+          <input matInput formControlName="currentEmail">
+          <mat-error *ngIf="this.editForm.get('currentEmail').hasError('required')">Podaj obecny Mail</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Obecne hasło</mat-label>
+          <input matInput type="password" formControlName="currentPassword">
+          <mat-error *ngIf="this.editForm.get('currentPassword').hasError('required')">Podaj obecne Hasło</mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <div class="new-mail-and-new-password" fxLayout="column" fxLayoutGap="50px">
+        <mat-form-field appearance="outline">
+          <mat-label>Nowy Mail</mat-label>
+          <input matInput formControlName="newEmail">
+          <mat-error *ngIf="this.editForm.get('newEmail').hasError('pattern')">Błędny format emailu (poprawny np. janKowalski@mail.pl)</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nowe hasło</mat-label>
+          <input matInput type="password" formControlName="newPassword">
+          <mat-error *ngIf="this.editForm.get('newPassword').hasError('pattern')">Hasło jest słabe. Hasło powinno składać się przynajmniej z 8 znaków,
+            w tym z conajmniej 1 wielkiej liter, 1 małej litery, 1 cyfry i 1 znaku specjalnego</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Powtórz nowe hasło</mat-label>
+          <input matInput [type]="'password'" formControlName="newPassword2" placeholder="Powtórz hasło" [errorStateMatcher]="matcher"/>
+          <mat-error *ngIf="this.editForm.hasError('notSame')">
+            Hasła <strong>nie</strong> są takie same
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+    <div class="button-container" fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="center">
+
+      <button mat-button (click)='this.updateEmailAndOrPassword()'
+              [disabled]="!this.editForm.get('currentEmail').valid || !this.editForm.get('currentPassword').valid ||
+                          (this.editForm.get('newEmail').value === '' && this.editForm.get('newPassword').value === '') ||
+                          !(this.editForm.get('newPassword').value === this.editForm.get('newPassword2').value) ||
+                          (!this.editForm.get('newEmail').valid && this.editForm.get('newEmail').value !== '')" >Zapisz zmiany</button>
+      <mat-error *ngIf="this.errorInfo2">{{this.errorInfo2}}</mat-error>
+    </div>
+  </div>
+</div>

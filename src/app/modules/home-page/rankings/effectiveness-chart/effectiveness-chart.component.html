@@ -1,0 +1,50 @@
+<div class="container" fxLayout="column" fxLayoutGap="110px">
+  <div class="canvas-container">
+    <canvas baseChart *ngIf="this.dataLoaded" #chart
+            [datasets]="this.chartData"
+            [labels]="this.chartLabel"
+            [options]="this.chartOptions"
+            [legend]="true"
+            [chartType]="this.chartType">
+    </canvas>
+  </div>
+
+  <form [formGroup]="this.datesForm" fxLayout="column" fxLayoutGap="20px">
+    <mat-form-field appearance="outline" title="Od">
+      <mat-label>Od</mat-label>
+      <input class="input-font"
+             readonly
+             matInput
+             formControlName="dateFrom"
+             autocomplete="off"
+             [value]="this.datesForm.get('dateFrom').value"
+             [max]="maxDate"
+             [matDatepicker]="picker"
+             (ngModelChange)="this.setMinDate(); this.loadChangelogs()" >
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker disabled="false" #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" title="Do">
+      <mat-label>Do</mat-label>
+      <input class="input-font"
+             readonly
+             matInput
+             formControlName="dateTo"
+             autocomplete="off"
+             [value]="this.datesForm.get('dateTo').value"
+             [min]="minDate"
+             [matDatepicker]="picker2"
+             (ngModelChange)="this.setMaxDate(); this.loadChangelogs()">
+      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+      <mat-datepicker disabled="false" #picker2></mat-datepicker>
+    </mat-form-field>
+
+    <mat-radio-group (change)="this.reloadChart()" fxLayout="column" fxLayoutGap="10px">
+      <mat-radio-button color="primary" value="1" [checked]="true" >Miesięczna skuteczność</mat-radio-button>
+      <mat-radio-button color="primary" value="2">Średnia skuteczność</mat-radio-button>
+    </mat-radio-group>
+  </form>
+
+</div>
+

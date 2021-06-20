@@ -1,0 +1,114 @@
+<div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="10px">
+  <div class="container" fxLayout="column" *ngIf="!this.details && this.projects != undefined">
+    <div fxLayout="row" fxFlex="100%" fxFlexAlign="center">
+      <div class="toggle-buttons-container" fxLayout="row" style="background-color: white">
+        <div (click)="this.onToggleButtonClick('all')"
+             [ngClass]="this.activeToggleButton === 'all' ? 'active-toggle-button' : 'toggle-button'">Wszystkie</div>
+        <div (click)="this.onToggleButtonClick('Aktywny')"
+             [ngClass]="this.activeToggleButton === 'Aktywny' ? 'active-toggle-button' : 'toggle-button'">Aktywne</div>
+        <div (click)="this.onToggleButtonClick('Zakończony')"
+             [ngClass]="this.activeToggleButton === 'Zakończony' ? 'active-toggle-button' : 'toggle-button'">Zakończone</div>
+        <div (click)="this.onToggleButtonClick('Zarchiwizowany')"
+             [ngClass]="this.activeToggleButton === 'Zarchiwizowany' ? 'active-toggle-button' : 'toggle-button'">Zarchiwizowane</div>
+        <div (click)="this.onToggleButtonClick('Anulowany')"
+             [ngClass]="this.activeToggleButton === 'Anulowany' ? 'active-cancel-toggle-button' : 'cancel-toggle-button'">Anulowane</div>
+        <div (click)="this.onToggleButtonClick('Nierozpoczęty')"
+             [ngClass]="this.activeToggleButton === 'Nierozpoczęty' ? 'active-cancel-toggle-button' : 'cancel-toggle-button'">Nierozpoczęte</div>
+        <div (click)="this.onToggleButtonClick('Wstrzymany')"
+             [ngClass]="this.activeToggleButton === 'Wstrzymany' ? 'active-cancel-toggle-button' : 'cancel-toggle-button'">Wstrzymane</div>
+      </div>
+    </div>
+
+    <div class="projects-container" fxLayout="row wrap"  fxFlexAlign="center center">
+      <ng-container *ngIf="this.dataLoaded">
+        <ng-container *ngFor="let project of this.projects; index as i">
+          <div class="single-project"
+               *ngIf="project != undefined && project.status != undefined && (project.status === this.activeToggleButton || this.activeToggleButton ==='all')
+               && project.tasks != undefined && project.members != undefined"
+               (click)="this.setSingleProject(i)">
+            <div class="single-project-inner" [ngStyle]="{'background': 'linear-gradient(rgba(' + project.decColor[0] + ',' + project.decColor[1] + ',' + project.decColor[2] + ', 0.1), rgba(' + project.decColor[0] + ',' + project.decColor[1] + ',' + project.decColor[2] + ', 0.02))'}">
+  <!--            Title-->
+              <p class="project-title">{{project.title}}</p>
+
+  <!--            Description-->
+              <div *ngIf="project.tasks != undefined" class="details-container" fxLayout="column">
+                <p class="details-info first-info" >Szczegóły</p>
+                <p class="project-description-content">{{project.description.slice(0, 179)}} {{project.description.length > 180 ? '...' : ''}}</p>
+<!--                Progress Bar-->
+                <p class="details-info" *ngIf="project.tasks.length > 0">Obecny postęp</p>
+                <div class="progress-bar-100" *ngIf="project.tasks.length > 0">
+                  <div class="progress-bar-project" *ngIf="this.calculateTotalFinished(project.tasks, 'percentage', i) != undefined"
+                       [ngStyle]="{'width': this.widthsForScss[i] == undefined ? '0' : (this.widthsForScss[i] == '0%' ? 0 : this.widthsForScss[i]), 'background-color': project.color}">
+                  </div>
+                </div>
+                <p class="finished-in" *ngIf="project.tasks.length > 0">Ukończono w {{this.widthsForScss[i]}} ({{this.calculateTotalFinished(project.tasks,'number', i)}}/{{project.tasks.length}} zadań)</p>
+              </div>
+
+  <!--            Date + Status-->
+              <div class="details-container">
+  <!--              Date-->
+                <p class="details-info first-info">Okres prac</p>
+                <div class="dates-container" fxLayout="row wrap" fxFlexAlign="center">
+                  <div fxLayout="column">
+                    <p class="from-to">Od</p>
+                    <p class="date-period">
+                      {{project.start_date.toDate() | date :'EEEE, d.LL.yyyy' }}
+                    </p>
+                  </div>
+                  <div fxLayout="column">
+                    <p class="from-to">Do</p>
+                    <p class="date-period">
+                      {{project.end_date.toDate() | date :'EEEE, d.LL.yyyy'}}
+                    </p>
+                  </div>
+                </div>
+                <p class="after-deadline" *ngIf="project.status === 'Aktywny' && project.end_date.seconds <= this.todayDate.seconds">
+                  Termin przekroczony o {{this.calculateDeadlineDays(this.todayDate.seconds - project.end_date.seconds)}}!!!
+                </p>
+                <p class="before-deadline" *ngIf="project.status === 'Aktywny' && project.end_date.seconds > this.todayDate.seconds">
+                  Termin mija za {{this.calculateDeadlineDays( project.end_date.seconds - this.todayDate.seconds)}}
+                </p>
+  <!--              Status-->
+                <p class="details-info">Status</p>
+                <div class="status-container" fxLayout="row" fxFlexAlign="center" fxLayoutGap="20px">
+                  <div class="status-icon" [ngStyle]="{'background-color': (project.status === 'Aktywny' ? 'green' :
+                (project.status === 'Zakończony' ? 'black' : (project.status === 'Anulowany' ? 'red' : 'blue')))}">
+                  </div>
+                  <p class="status-content" [ngStyle]="{'color': (project.status === 'Aktywny' ? 'green' :
+                (project.status === 'Zakończony' ? 'black' : (project.status === 'Anulowany' ? 'red' : 'blue')))}">{{project.status}}</p>
+                </div>
+
+              </div>
+
+  <!--            Members-->
+              <div class="details-container">
+                <p class="details-info first-info">Uczestnicy</p>
+                <div class="members" fxLayout="row wrap" fxLayoutAlign="space-between">
+                  <ng-container *ngFor="let member of project.members" >
+                    <div class="single-member" fxLayout="row" fxLayoutGap="10px" *ngIf="member.photoUrl !== null">
+                      <img class="member-photo" *ngIf="member.photoUrl !== null" [src]="member.photoUrl || ''" alt="member-photo"/>
+                      <p fxFlexAlign="center center">{{member.name.slice(0,1)}}.{{member.surname}}</p>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+  <div class="custom-button-wrapper" fxLayoutAlign="center">
+    <button class="custom-button" *ngIf="this.sharedData.employeeDetails.administrator && !this.details" (click)="this.addProject()">Nowy projekt</button>
+  </div>
+
+  <p *ngIf="this.projects === undefined">Nie znaleziono żadnego projektu którego jesteś uczestnikiem</p>
+
+  <one-work-project-details *ngIf="this.details"
+                            [totalFinishedTasks]="this.calculateTotalFinished(this.singleProjectData.tasks, 'number')"
+                            [project]="this.singleProjectData"
+                            (details)="this.details=$event">
+
+  </one-work-project-details>
+</div>
+

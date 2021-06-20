@@ -1,0 +1,15 @@
+<div class="container" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+  <div class="header-container">
+    <p>Potwierdź obecność</p>
+  </div>
+  <div fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="center center">
+    <p class="info">Potwierdź swoją obecność przy aplikacji.</p>
+    <p class="counter" *ngIf="this.leftTime <= 59">00:{{this.leftTime.toFixed(0)}}</p>
+    <p class="counter" *ngIf="this.leftTime > 59">01:00</p>
+  </div>
+
+  <div class="custom-button-wrapper">
+    <button class="custom-button" (click)="this.closeWithSucces()">Jestem!</button>
+  </div>
+</div>
+

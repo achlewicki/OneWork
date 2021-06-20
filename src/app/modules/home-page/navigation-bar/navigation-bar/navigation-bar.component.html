@@ -1,0 +1,64 @@
+<div class="container" fxFlexAlign="center center" fxLayout="row wrap">
+  <div class="main-part long-version" fxFlex="100%">
+    <div class="left-side" fxFlex="25%" fxLayout="row" fxLayoutGap="30px">
+      <img class="logo" src="assets/logo.png" alt="OneWorkLogo">
+      <p> {{this.activeComponent}}</p>
+    </div>
+    <div  class="center-side" fxFlex="50%"  fxLayout="row" fxLayoutGap="50px">
+      <a matTooltip="Ustawienia" routerLink="/home/settings" (click)="this.changeActiveComponent('Ustawienia')"
+         [ngClass] = "this.activeComponent === 'Ustawienia' ?  'active-version' : 'inactive-version'">
+        <div class="icon">
+          <img class="photo" alt="photo" *ngIf="this.photoUrl != undefined" [src]="this.photoUrl || ''">
+        </div>
+      </a>
+      <a matTooltip="Czat" [routerLink]="['/home/messages']" (click)="this.changeActiveComponent('Czat')" fxFlexAlign="center center"
+         [ngClass] = "this.activeComponent === 'Czat' ?  'active-version' : 'inactive-version'">
+        <div class="icon">
+          <fa-icon  [size]="this.activeComponent === 'Czat' ? '4x' : '3x'"
+                    [icon]="messageIcon"></fa-icon>
+        </div>
+      </a>
+      <a matTooltip="Dashboard" routerLink="/home" (click)="this.changeActiveComponent('Dashboard')"
+         [ngClass] = "this.activeComponent === 'Dashboard' ?  'active-version' : 'inactive-version'">
+        <div class="icon">
+          <fa-icon [size]="this.activeComponent === 'Dashboard' ? '4x' : '3x'"
+                   [icon]="dashboardIcon" ></fa-icon>
+        </div>
+      </a>
+      <a matTooltip="Projekty" routerLink="/home/projects" (click)="this.changeActiveComponent('Projekty')"
+         [ngClass] = "this.activeComponent === 'Projekty' ?  'active-version' : 'inactive-version'">
+        <div class="icon">
+          <fa-icon [size]="this.activeComponent === 'Projekty' ? '4x' : '3x'" [icon]="projectsIcon" ></fa-icon>
+        </div>
+      </a>
+      <a matTooltip="Ranking" routerLink="/home/ranking" (click)="this.changeActiveComponent('Ranking')"
+         [ngClass] = "this.activeComponent === 'Ranking' ?  'active-version' : 'inactive-version'">
+        <div class="icon">
+          <fa-icon [size]="this.activeComponent === 'Ranking' ? '4x' : '3x'" [icon]="rankingIcon" ></fa-icon>
+        </div>
+      </a>
+    </div>
+    <div class="right-side" fxFlex="25%" fxLayout="row" fxLayoutAlign="end" fxLayoutGap="20px">
+      <a *ngIf="this.sharedData.employeeDetails != undefined && this.sharedData.employeeDetails.super_administrator"
+         matTooltip="Zarządzanie Firmą" (click)="this.changeActiveComponent('Zarządzanie Firmą'); this.openDialog()"
+         [ngClass] = "this.activeComponent === 'Zarządzanie Firmą' ?  'active-version' : 'inactive-version'">
+        <div class="icon">
+          <fa-icon [size]="'2x'" [icon]="companyManagementIcon"></fa-icon>
+        </div>
+      </a>
+      <a *ngIf="this.sharedData.employeeDetails != undefined && this.sharedData.employeeDetails.administrator"
+         matTooltip="Zarządzanie Pracownikami" routerLink="/home/management" (click)="this.changeActiveComponent('Zarządzanie Pracownikami')"
+         [ngClass] = "this.activeComponent === 'Zarządzanie Pracownikami' ?  'active-version' : 'inactive-version'">
+        <div class="icon">
+          <fa-icon [size]="'2x'" [icon]="employeesManagementIcon"></fa-icon>
+        </div>
+      </a>
+      <a matTooltip="Wyloguj się" routerLink="/login" (click)="this.changeActiveComponent('logout'); this.logOut()"
+         [ngClass] = "this.activeComponent === 'logout' ?  'active-version' : 'inactive-version'">
+        <div class="icon">
+          <fa-icon [size]="'2x'" [icon]="logoutIcon" ></fa-icon>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,176 @@
+<div class="content" fxLayoutAlign="center" fxLayout="row">
+  <mat-vertical-stepper class="stepper" linear>
+    <mat-step [stepControl]="this.codeForm" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="16px">
+      <form [formGroup]="this.codeForm" fxLayout="row wrap" fxLayoutAlign="center">
+        <div fxFlex="100%" class="code-form">
+          <mat-form-field appearance="outline" fxFlex="200px">
+            <mat-label>
+              Kod do rejestracji*
+            </mat-label>
+            <input matInput formControlName="code" placeholder="Kod">
+            <mat-error *ngIf="this.codeForm.get('code').hasError('required')">
+              Kod jest wymagany
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </form>
+
+      <mat-error *ngIf="this.codeError">
+        {{this.codeError}}
+      </mat-error>
+
+      <div fxLayout="row" fxLayoutAlign="start" fxLayoutGap="10px">
+        <div class="custom-button-wrapper">
+          <button class="custom-button" (click)="this.establishCompanyWithRegistrationCode()">Sprawdź kod</button>
+        </div>
+
+        <div class="custom-button-wrapper">
+          <button class="custom-button" *ngIf="this.companyInfo" matStepperNext>Dalej</button>
+        </div>
+      </div>
+    </mat-step>
+
+    <mat-step *ngIf="codeInfo != undefined">
+      <div fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="start">
+        <div *ngIf="codeInfo != undefined" fxLayout="column" fxLayoutGap="6px">
+          <header>Informacje o kodzie <strong>{{this.codeInfo.value}}</strong>:</header>
+          <p>Ważność: {{this.codeInfo.expires_after.toDate() | date: 'dd MMMM yyyy, HH:mm:ss'}}</p>
+          <p>Pozostała ilość razy do wykorzystania: {{this.codeInfo.remaining_number_of_times_to_use}}</p>
+        </div>
+
+        <div>
+          <p class="error" *ngIf="this.expired">
+            Kod stracił ważność.
+          </p>
+          <p class="error" *ngIf="!(this.codeInfo == undefined) && this.codeInfo.remaining_number_of_times_to_use < 1">
+            Liczba możliwych rejestracji za pomocą tego kodu jest równa 0. <br>Nie mozna zarajestrować się już za pomocą tego kodu.
+          </p>
+          <p class="error" *ngIf="!this.codeInfo.valid">
+            Kod jest zablokowany
+          </p>
+        </div>
+
+        <div *ngIf="companyInfo!=null" fxLayout="column" fxLayoutGap="6px">
+          <header>Kod jest powiązany z firmą:</header>
+          <p>{{this.companyInfo.name}}</p>
+          <p>ul. {{this.companyInfo.address.street}}, {{this.companyInfo.address.zip_code}} {{this.companyInfo.address.city}}</p>
+          <p>{{this.companyInfo.phone}}</p>
+          <p>{{this.companyInfo.mail}}</p>
+        </div>
+
+        <div *ngIf="companyInfo!=null && !companyInfo.valid">
+          <p> Firma nie jest aktualna </p>
+        </div>
+
+        <div class="custom-button-wrapper">
+          <button class="custom-button" *ngIf="this.companyInfo &&
+                            this.companyInfo.valid &&
+                            this.codeInfo.remaining_number_of_times_to_use > 0 &&
+                            !this.expired" matStepperNext>Dalej</button>
+        </div>
+      </div>
+    </mat-step>
+
+    <mat-step [stepControl]="this.registrationForm" *ngIf="!this.expired && this.codeInfo.remaining_number_of_times_to_use > 0 && this.codeInfo.valid">
+      <form [formGroup]="registrationForm" (ngSubmit)="this.createEmployee()" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="20px">
+        <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="16px">
+          <!---- Email ----->
+          <mat-form-field appearance="legacy">
+            <mat-label>Email*</mat-label>
+            <input matInput formControlName="email" placeholder="Email"/>
+            <mat-error *ngIf="this.registrationForm.get('email').hasError('pattern') &&
+                      !this.registrationForm.get('email').hasError('required')">
+              Błędny format emaila (poprawny np. example@gmail.com)
+            </mat-error>
+            <mat-error *ngIf="this.registrationForm.get('email').hasError('required')">
+              Email jest wymagany.
+            </mat-error>
+          </mat-form-field>
+
+          <!---- Password ----->
+          <mat-form-field appearance="legacy">
+            <mat-label>Hasło*</mat-label>
+            <input matInput [type]="'password'" formControlName="newPassword" placeholder="Hasło" />
+            <mat-error *ngIf="this.registrationForm.get('newPassword').hasError('required')">
+              Hasło jest wymagane.
+            </mat-error>
+            <mat-error *ngIf="this.registrationForm.get('newPassword').hasError('pattern')">
+              Hasło jest słabe. Hasło powinno składać się przynajmniej z 8 znaków,
+              w tym z conajmniej 1 wielkiej liter, 1 małej litery, 1 cyfry i 1 znaku specjalnego
+            </mat-error>
+          </mat-form-field>
+
+          <!---- Password2 ----->
+          <mat-form-field appearance="legacy">
+            <mat-label>Powtórz hasło*</mat-label>
+            <input matInput [type]="'password'" formControlName="newPassword2" placeholder="Powtórz hasło" [errorStateMatcher]="matcher"/>
+            <mat-error *ngIf="this.registrationForm.hasError('notSame')">
+              Hasła <strong>nie</strong> są takie same
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between"  fxLayoutGap="16px">
+          <mat-form-field appearance="legacy">
+            <mat-label>Imię*</mat-label>
+            <input matInput formControlName="name" placeholder="Imię"/>
+            <mat-error *ngIf="this.registrationForm.get('name').hasError('required')">
+              Imię jest wymagane.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="legacy">
+            <mat-label>Nazwisko*</mat-label>
+            <input matInput formControlName="surname" placeholder="Imię"/>
+            <mat-error *ngIf="this.registrationForm.get('surname').hasError('required')">
+              Nazwisko jest wymagane.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="legacy">
+            <mat-label>Telefon Kontaktowy*</mat-label>
+            <input matInput formControlName="phone" placeholder="Telefon Kontaktowy"/>
+            <mat-error *ngIf="this.registrationForm.get('phone').hasError('required')">
+              Telefon kontaktowy jest wymagany.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between" formGroupName="address" fxLayoutGap="16px">
+          <mat-form-field appearance="legacy">
+            <mat-label>Ulica*</mat-label>
+            <input matInput formControlName="street" placeholder="Ulica">
+            <mat-error *ngIf="this.registrationForm.get('address').controls['street'].hasError('required')">Ulica jest wymagana</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="legacy">
+            <mat-label>Miejscowość*</mat-label>
+            <input matInput formControlName="city" placeholder="Miejscowość" autocomplete="off">
+            <mat-error *ngIf="this.registrationForm.get('address').controls['city'].hasError('required')">Miejscowość jest wymagana</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="legacy">
+            <mat-label>Kod Pocztowy*</mat-label>
+            <input matInput formControlName="zip_code" placeholder="Kod Pocztowy" autocomplete="off">
+            <mat-error *ngIf="this.registrationForm.get('address').controls['zip_code'].hasError('required')">Kod Pocztowy jest wymagany</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="legacy">
+            <mat-label>Województwo*</mat-label>
+            <input matInput formControlName="state" placeholder="Województwo" autocomplete="off">
+            <mat-error *ngIf="this.registrationForm.get('address').controls['state'].hasError('required')">Województwo jest wymagane</mat-error>
+          </mat-form-field>
+        </div>
+
+
+        <div class="custom-button-wrapper" fxLayout="column" fxLayoutGap="10px">
+          <button  *ngIf="!this.expired && this.codeInfo.remaining_number_of_times_to_use > 0 && this.codeInfo.valid
+                          && this.registrationForm.valid && this.registrationForm.get('newPassword').value === this.registrationForm.get('newPassword2').value"
+                   class="custom-button">Zarejestruj
+          </button>
+          <mat-error *ngIf="this.errorInfo">{{this.errorInfo}}</mat-error>
+        </div>
+      </form>
+    </mat-step>
+  </mat-vertical-stepper>
+</div>

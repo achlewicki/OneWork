@@ -1,0 +1,17 @@
+.container {
+  height: 100%;
+  padding: 20px 20px 100px 20px;
+
+  .checkbox-container {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+    height: 80px;
+    width: auto;
+    padding: 10px 20px;
+  }
+}

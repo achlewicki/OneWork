@@ -1,0 +1,45 @@
+<div fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="center">
+
+  <h2 style="font-family: 'Nunito', sans-serif; text-align: center" *ngIf="this.newGroup">Nową grupa</h2>
+  <h2 style="font-family: 'Nunito', sans-serif; text-align: center" *ngIf="!this.newGroup">Edytuj grupę</h2>
+
+  <form [formGroup]="this.groupForm" fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="center">
+    <div fxLayout="row" fxLayoutAlign="space-around" fxLayoutGap="30px">
+
+      <mat-form-field appearance="legacy">
+        <input matInput autocomplete="off" formControlName="name" placeholder="Nazwa">
+        <mat-error *ngIf="this.groupForm.get('name').hasError('required')">Nazwa nie może być pusta</mat-error>
+        <mat-error *ngIf="this.groupForm.get('name').hasError('maxLength')">Maksymalna ilośc znaków to 30</mat-error>
+      </mat-form-field>
+
+      <div class="custom-button-wrapper">
+        <button class="custom-button" [disabled]="!this.groupForm.valid && !this.groupForm.get('name').dirty" (click)="this.addEditGroup()">
+          {{this.newGroup ? 'Dodaj' : 'Zapisz'}}
+        </button>
+      </div>
+    </div>
+
+    <h2 style="font-family: 'Nunito', sans-serif; text-align: center" *ngIf="!this.newGroup">Osoby</h2>
+    <div class="employees-members-container" fxLayout="row" fxLayoutAlign="space-around" *ngIf="!this.newGroup">
+      <div class="employees-container" fxLayout="column">
+        <h3 class="employees-title">Dostępne osoby</h3>
+        <div class="single-employee" *ngFor="let employee of this.employees" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between" (click)="this.addEmployeeToMembers(employee)">
+          <img class="photo" [src]="employee.photoUrl" alt="photo">
+          <p class="font-p">{{employee.name}} {{employee.surname}}</p>
+        </div>
+      </div>
+
+      <div class="members-container" fxLayout="column">
+        <h3 class="employees-title">Osoby w grupie</h3>
+        <div class="single-member" *ngFor="let member of this.members" fxLayout="row" (click)="this.removeMemberFromLocalMembers(member)">
+          <img class="photo" [src]="member.photoUrl" alt="photo">
+          <p class="font-p">{{member.name}} {{member.surname}}</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <fa-icon *ngIf="!this.newGroup" [icon]="this.deleteicon" style="cursor:pointer; color: red" [size]="'2x'" (click)="this.deleteGroup()"></fa-icon>
+    </div>
+  </form>
+</div>

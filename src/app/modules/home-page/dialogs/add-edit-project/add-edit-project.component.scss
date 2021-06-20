@@ -1,0 +1,128 @@
+.container {
+  form {
+    form {
+      align-items: center;
+    }
+
+    .no-resize {
+      resize: none;
+    }
+
+    h3 {
+      margin-top: 0;
+      margin-bottom: 4px;
+    }
+
+    .delete-icon, .edit-icon, .expand-icon {
+      color: rgba(210,210,210, 0.8)
+    }
+
+    .delete-icon:hover, .delete-icon:focus {
+      color: rgba(255,0,0,0.7);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .edit-icon {
+      @font-face {
+        font-weight: 400;
+      }
+    }
+
+    .edit-icon:hover, .edit-icon:focus {
+      color: rgba(0,150,0, 0.8);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .expand-icon:hover, .expand-icon:focus {
+      color: black;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+
+    .textarea-subtask {
+      height: 60px;
+    }
+
+    .input-font-2 {
+      font-size: 18px;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .input-font-3 {
+      font-size: 16px;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .tasks-container {
+      .single-task {
+        margin-bottom: 20px;
+      }
+
+      .single-subtask {
+        align-items: center;
+      }
+
+
+    }
+
+    .employees-members-container {
+      padding: 0 10px;
+      margin-top: 10px;
+
+      .font-p {
+        font-family: 'Arial', sans-serif;
+        font-size: 18px;
+        color: black;
+        padding: 4px 4px 4px 0;
+        margin: 0;
+      }
+
+      .single-employee, .single-member{
+        padding: 8px 14px;
+        margin-top: 8px;
+      }
+
+      .single-employee:hover, .single-member:hover {
+        border-radius: 12px;
+        background: rgba(230,230,230,0.8);
+        cursor: pointer;
+      }
+      .line {
+        margin-top: 24px;
+        border-radius: 6px;
+        width: 6px;
+        background: rgba(230,230,230,0.8)
+      }
+    }
+    .basic-container {
+      padding: 0 10px;
+      h4 {
+        margin-bottom: 4px;
+      }
+
+      .input-font {
+        font-size: 18px;
+        font-family: 'Arial', sans-serif;
+        font-weight: 500;
+      }
+
+
+      .textarea-project {
+        height: 100px;
+      }
+
+      .color-picker {
+        border-radius: 100%;
+        border: solid 1px black;
+        position: relative;
+        width: 40px;
+        height: 40px;
+        margin-left: 18px;
+        margin-top: 6px;
+      }
+    }
+  }
+}

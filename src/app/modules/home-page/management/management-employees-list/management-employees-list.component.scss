@@ -1,0 +1,86 @@
+.container {
+  background-color: white;
+  box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+  border-radius: 12px;
+  padding: 14px;
+  width: 350px;
+  height: 860px;
+
+  .employees-list {
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar { // Chrome
+      display: none;
+    }
+
+    -ms-overflow-style: none;  /* IE i Edge */
+    scrollbar-width: none;  /* Firefox */
+
+    .single-employee {
+      border-radius: 12px;
+      padding: 7px;
+
+      &:hover {
+        background-color: rgba(240,240,240,0.9);
+        transition: 0.4s;
+        cursor: pointer;
+      }
+
+      .photo {
+        width: 60px;
+        height: 60px;
+        border-radius: 100%;
+      }
+
+      p {
+        padding: 3px 8px;
+        margin: 0;
+        font-family: 'Arial', sans-serif;
+        //font-size: 18px;
+      }
+
+      .name-surname {
+        font-size: 16px;
+        font-weight: 700;
+        overflow-x: hidden;
+      }
+
+      .tagged {
+        padding: 3px 8px;
+        font-style: italic;
+        font-family: 'Nunito', sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .admin {
+        color: darkorange;
+      }
+
+      .new {
+        color: #00B11A;
+      }
+
+      .blocked {
+        color: red;
+      }
+
+      .employed-since {
+        font-size: 14px;
+        color: #A7A7A7;
+        font-style: italic;
+      }
+    }
+
+    .active {
+      background-color: rgba(240,240,240,0.9);
+      transition: 0.4s;
+    }
+
+    .inactive {
+      background-color: white;
+      transition: 0.4s;
+    }
+  }
+
+}

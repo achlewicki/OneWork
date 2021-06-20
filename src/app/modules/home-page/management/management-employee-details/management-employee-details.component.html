@@ -1,0 +1,208 @@
+<div class="container" fxLayout="column" fxLayoutGap="14px">
+  <div class="main-info" fxLayout="row" fxLayoutAlign="space-around center">
+    <img class="photo" *ngIf="this.employeeToManage.photoUrl != null" [src]="this.employeeToManage.photoUrl">
+    <div fxLayout="column">
+      <p class="name-surname">{{this.employeeToManage.name.toUpperCase()}} {{this.employeeToManage.surname.toUpperCase()}}</p>
+      <div fxLayout="row" fxLayoutGap="6px" fxLayoutAlign="space-around center">
+        <p class="admin" *ngIf="employeeToManage.administrator">Administrator</p>
+        <p class="new" *ngIf="employeeToManage.new">Nowy</p>
+        <p class="blocked" *ngIf="!employeeToManage.valid">Zablokowany</p>
+      </div>
+    </div>
+
+    <p class="internship">Staż: {{this.intership}}</p>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <h3>Edycja danych osobowych</h3>
+    <a matTooltip="Zapisz zmiany">
+      <div class="icon"
+           (click)="this.editEmployee()"
+           [hidden]="(!this.employeeToEdit.get('name').dirty && !this.employeeToEdit.get('surname').dirty
+                        && !this.employeeToEdit.get('phone').dirty && !this.employeeToEdit.get('address').controls.street.dirty
+                        && !this.employeeToEdit.get('address').controls.city.dirty && !this.employeeToEdit.get('address').controls.state.dirty
+                        && !this.employeeToEdit.get('address').controls.zip_code.dirty)
+                        || !this.employeeToEdit.valid" >
+        <fa-icon disabled="" class="edit-icon" [icon]="editIcon" [size]="'2x'"></fa-icon>
+      </div>
+    </a>
+
+  </div>
+
+  <form [formGroup]="this.employeeToEdit" fxLayout="column" fxLayoutGap="16px">
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <mat-form-field appearance="legacy">
+        <mat-label>Imię*</mat-label>
+        <input matInput
+               readonly="{{!this.sharedData.employeeDetails.super_administrator &&
+               (!this.sharedData.employeeDetails.administrator || (this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && this.employeeToManage.administrator))}}"
+               formControlName="name"
+               placeholder="Imię"
+               autocomplete="off"/>
+        <mat-error *ngIf="this.employeeToEdit.get('name').hasError('required')">Imię jest wymagane</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Nazwisko*</mat-label>
+        <input matInput
+               readonly="{{!this.sharedData.employeeDetails.super_administrator &&
+               (!this.sharedData.employeeDetails.administrator || (this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && this.employeeToManage.administrator))}}"
+               formControlName="surname"
+               placeholder="Nazwisko"
+               autocomplete="off"/>
+        <mat-error *ngIf="this.employeeToEdit.get('surname').hasError('required')">Nazwisko jest wymagane</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Telefon Kontaktowy*</mat-label>
+        <input matInput
+               readonly="{{!this.sharedData.employeeDetails.super_administrator &&
+               (!this.sharedData.employeeDetails.administrator || (this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && this.employeeToManage.administrator))}}"
+               formControlName="phone"
+               placeholder="Telefon Kontaktowy"
+               autocomplete="off"/>
+        <mat-error *ngIf="this.employeeToEdit.get('phone').hasError('required')">Telefon kontaktowy jest wymagany</mat-error>
+      </mat-form-field>
+    </div>
+
+
+    <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="30px" formGroupName="address">
+      <mat-form-field appearance="legacy">
+        <mat-label>Ulica*</mat-label>
+        <input matInput
+               readonly="{{!this.sharedData.employeeDetails.super_administrator &&
+               (!this.sharedData.employeeDetails.administrator || (this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && this.employeeToManage.administrator))}}"
+               formControlName="street"
+               placeholder="Ulica"
+               autocomplete="off"/>
+        <mat-error *ngIf="this.employeeToEdit.get('address').controls['street'].hasError('required')">Ulica jest wymagana</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Miejscowość*</mat-label>
+        <input matInput
+               readonly="{{!this.sharedData.employeeDetails.super_administrator &&
+               (!this.sharedData.employeeDetails.administrator || (this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && this.employeeToManage.administrator))}}"
+               formControlName="city"
+               placeholder="Miejscowość"
+               autocomplete="off"/>
+        <mat-error *ngIf="this.employeeToEdit.get('address').controls['city'].hasError('required')">Miejscowość jest wymagana</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Kod Pocztowy*</mat-label>
+        <input matInput
+               readonly="{{!this.sharedData.employeeDetails.super_administrator &&
+               (!this.sharedData.employeeDetails.administrator || (this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && this.employeeToManage.administrator))}}"
+               formControlName="zip_code"
+               placeholder="Kod Pocztowy"
+               autocomplete="off"/>
+        <mat-error *ngIf="this.employeeToEdit.get('address').controls['zip_code'].hasError('required')">Kod pocztowy jest wymagany</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="legacy">
+        <mat-label>Województwo*</mat-label>
+        <input matInput
+               readonly="{{!this.sharedData.employeeDetails.super_administrator &&
+               (!this.sharedData.employeeDetails.administrator || (this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && this.employeeToManage.administrator))}}"
+               formControlName="state"
+               placeholder="Województwo"
+               autocomplete="off"/>
+        <mat-error *ngIf="this.employeeToEdit.get('address').controls['state'].hasError('required')">Wojwództwo jest wymagane</mat-error>
+      </mat-form-field>
+    </div>
+
+
+
+  </form>
+
+  <h3>Akcje</h3>
+
+  <div class="employee-options" fxLayout="row" fxLayoutAlign="space-around">
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <p>Administrator</p>
+      <mat-checkbox color="primary"
+                    (change)="this.setAdmin()"
+                    [(ngModel)]="this.adminCheck"
+                    [disabled]="this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && !this.sharedData.employeeDetails.super_administrator">
+      </mat-checkbox>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <p>Nowy pracownik </p>
+      <mat-checkbox color="primary" #newCheckbox
+                    (change)="this.changeNewStatus()"
+                    [checked]="this.employeeToManage.new"
+                    [disabled]="this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && this.employeeToManage.super_administrator">
+      </mat-checkbox>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center center">
+      <p>Pracownik zablokowany</p>
+      <mat-checkbox color="primary" #blockCheckbox
+                    [(ngModel)]="this.blockedCheck"
+                    (change)="this.setValidStatus()"
+                    [disabled]="this.sharedData.employeeDetails.documentId != this.employeeToManage.documentId && this.employeeToManage.super_administrator"></mat-checkbox>
+    </div>
+
+  </div>
+
+  <h3>Statyska</h3>
+  <div class="employee-places" fxLayout="row" fxLayoutAlign="space-around">
+    <div class="place-square" fxLayout="column" fxLayoutAlign="start center">
+      <p class="place-title" fxFlex="20%">Skuteczność</p>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80%">
+        <p class="place">#{{this.places.effectivenessPlace}}</p>
+        <p class="of-employees"> / {{this.numberOfEmployees}}</p>
+      </div>
+    </div>
+    <div class="place-square" fxLayout="column" fxLayoutAlign="start center">
+      <p class="place-title" fxFlex="20%">Top3</p>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80%">
+        <p class="place">#{{this.places.top3Place}}</p>
+        <p class="of-employees"> / {{this.numberOfEmployees}}</p>
+      </div>
+    </div>
+    <div class="place-square" fxLayout="column" fxLayoutAlign="start center">
+      <p class="place-title" fxFlex="20%">Top10</p>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80%">
+        <p class="place">#{{this.places.top10Place}}</p>
+        <p class="of-employees"> / {{this.numberOfEmployees}}</p>
+      </div>
+    </div>
+    <div class="place-square" fxLayout="column" fxLayoutAlign="start center">
+      <p class="place-title" fxFlex="20%">Bottommost</p>
+      <div fxLayout="row" fxLayoutAlign="center center" fxFlex="80%">
+        <p class="place">#{{this.places.bottommostPlace}}</p>
+        <p class="of-employees"> / {{this.numberOfEmployees}}</p>
+      </div>
+    </div>
+  </div>
+
+  <h3 *ngIf="this.validMonths != undefined && this.validMonths.length > 0 &&
+  ((this.employeeToManage.documentId != this.sharedData.employeeDetails.documentId && !this.employeeToManage.super_administrator) ||
+  (this.sharedData.employeeDetails.super_administrator))">Oceń pracownika</h3>
+
+  <form *ngIf="this.validMonths != undefined && this.validMonths.length > 0 && this.evaluationForm "
+        [formGroup]="this.evaluationForm" class="evaluation-part" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="30px">
+    <mat-form-field>
+      <mat-select formControlName="month">
+        <mat-option *ngFor="let option of this.validMonths; index as i" [value]="option" [disabled]="i != 0">{{option | date : 'LLLL yyyy'}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div fxLayout="column" fxFlex="30%">
+      <mat-label>Ocena* (0-10)</mat-label>
+      <mat-slider thumbLabel [displayWith]="this.label" tickInterval="1" max="20" min="0" [value]="10" (valueChange)="this.score = $event / 2" color="primary"></mat-slider>
+    </div>
+
+    <mat-form-field>
+      <mat-label>Komentarz (opcjonalny)</mat-label>
+      <input matInput formControlName="comment" autocomplete="off" >
+    </mat-form-field>
+
+    <a matTooltip="Dodaj ocenę"  (click)="this.addNewScore()" *ngIf="this.evaluationForm.valid" fxLayoutAlign="center">
+      <div class="icon">
+        <fa-icon class="edit-icon"  [icon]="addIcon" [size]="'2x'"></fa-icon>
+      </div>
+    </a>
+  </form>
+</div>
+

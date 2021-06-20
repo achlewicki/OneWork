@@ -1,0 +1,38 @@
+@import 'src/custom-theme';
+
+.container {
+  margin-top: 40px;
+  width: auto;
+  height: 700px;
+  align-self: center;
+
+  .conversations-list-container {
+    width: 300px;
+    height: 700px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+
+    .list {
+      margin: 6px 10px;
+    }
+  }
+
+  .conversation-content {
+    background-color: white;
+    width: 700px;
+    height: 700px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+
+    form {
+      .form-field {
+        margin-right: 20px;
+        border-radius: 12px !important;
+      }
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}

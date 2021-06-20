@@ -1,0 +1,42 @@
+<div class="container" fxLayout="column" fxLayoutAlign="center">
+  <h2 style="font-family: 'Nunito', sans-serif; text-align: center; margin: 8px 8px 4px 8px">{{this.selectedGroup.name}}</h2>
+  <div class="top-part" fxLayout="row">
+    <div class="member-part" *ngFor="let member of this.selectedGroup.members" fxLayout="row wrap" fxLayoutGap="4px" fxLayoutAlign="start center">
+      <img class="avatar" alt="photo" [src]="member.photoUrl || ''">
+      <p class="member-info">{{member.name[0]}}.{{member.surname}}</p>
+    </div>
+    <div class="slide-toggle">
+      <mat-slide-toggle  [checked]="this.scrolling" (change)="toggle($event)">
+        Autoscrolling
+      </mat-slide-toggle>
+    </div>
+  </div>
+  <div class="content" fxLayout="column" id="content" *ngIf="this.groupMessages != undefined">
+<!--    <fa-icon [icon]="this.loadMoreIcon" [size]="'2x'" (click)="this.loadMoreMessages()" *ngIf="this.thereIsMore"></fa-icon>-->
+    <div *ngFor="let message of this.groupMessages, index as i">
+      <p class="message-date" *ngIf="i == 0 || this.isItAnotherDay(this.groupMessages[i-1].date, this.groupMessages[i].date)">
+        {{this.setDateDisplay(message.date)}}
+      </p>
+      <div class="message" fxLayout="row"
+           [ngStyle]="{'justify-content': message.sender !== this.sharedData.employeeDetails.documentId || message.sender === 'removed' ? 'flex-start' : 'flex-end',
+                      'margin-bottom': i < this.groupMessages.length -1 && this.groupMessages[i+1].sender !== message.sender ? '16px' : '2px'}">
+        <div class="photo" *ngIf="(message.sender !== this.sharedData.employeeDetails.documentId &&
+              (i < this.groupMessages.length-1 && this.groupMessages[i+1].sender === message.sender))"></div>
+
+        <img *ngIf="message.sender === 'removed'" class="photo"
+             matTooltip="{{'Nadawca usunięty'}}" alt="photo" src="assets/new-user-avatar.png">
+
+        <img *ngIf="message.sender !== this.sharedData.employeeDetails.documentId &&
+              (i === this.groupMessages.length-1 || this.groupMessages[i+1].sender != message.sender)"
+             [src]="this.findMemberPhotoUrl(message.sender)" alt="photo" matTooltip="{{this.findMemberNameAndSurname(message.sender)}}"
+              class="photo">
+
+        <p class="message-inner" matTooltip="{{message.date.toDate() | date :'HH:mm:ss'}}"
+           [matTooltipPosition]="'above'"
+           [ngClass]="message.sender !== this.sharedData.employeeDetails.documentId || message.sender === 'removed' ? 'receiver-message' : 'sender-message'">
+          {{message.content}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,361 @@
+<div class="container">
+<!--  Project-->
+  <form [formGroup]="this.projectForm" fxLayout="column">
+
+<!--      Title-->
+    <h1 class="title" *ngIf="!this.isNewProject">Edytuj projekt</h1>
+    <h1 class="title" *ngIf="this.isNewProject">Dodaj projekt</h1>
+
+<!--      Basic Info-->
+    <div fxLayout="row" fxLayoutAlign="space-between">
+
+      <h3>1. Podstawowe dane</h3>
+
+      <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="16px">
+
+<!--    Edit Project Button-->
+        <a *ngIf="!this.isNewProject" matTooltip="Zapisz zmiany">
+          <div class="icon"
+               (click)="this.updateProject()"
+               [hidden]="(!this.projectForm.get('title').dirty && !this.projectForm.get('description').dirty
+                        && !this.projectForm.get('color').dirty && !this.projectForm.get('status').dirty
+                        && !this.projectForm.get('endDate').dirty && !this.projectForm.get('startDate').dirty)
+                        || !this.projectForm.valid" >
+            <fa-icon disabled="" class="edit-icon" [styles]="'regular'" [icon]="editIcon" [size]="'2x'"></fa-icon>
+          </div>
+        </a>
+
+<!--    Delete Project Button-->
+        <a *ngIf="!this.isNewProject" (click)="this.deleteProject()" matTooltip="Usuń projekt">
+          <div class="icon">
+            <fa-icon class="delete-icon" [icon]="deleteIcon" [size]="'2x'"></fa-icon>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <div class="basic-container" fxLayout="column">
+<!--      Title-->
+      <h4>Tytuł*</h4>
+      <mat-form-field appearance="fill" title="Nazwa projektu">
+        <input class="input-width input-font" matInput formControlName="title" autocomplete="off"/>
+        <mat-error *ngIf="this.projectForm.get('title').hasError('required')">
+          Tytuł projektu jest wymagany
+        </mat-error>
+      </mat-form-field>
+
+      <!--      Description-->
+      <h4>Szczegóły*</h4>
+      <mat-form-field appearance="fill" title="Szczegóły projektu">
+        <textarea class="no-resize textarea-project input-font" matInput formControlName="description"></textarea>
+        <mat-error *ngIf="this.projectForm.get('description').hasError('required')">
+          Szczegóły projektu są wymagane
+        </mat-error>
+      </mat-form-field>
+
+<!--      Dates-->
+      <div fxLayout="row" fxLayoutAlign="space-around">
+        <!--      Start Date-->
+        <div>
+          <h4>Początek prac*</h4>
+          <mat-form-field appearance="fill" title="Data rozpoczęcia">
+            <input class="input-font" readonly matInput formControlName="startDate" autocomplete="off" [max]="maxDate" [matDatepicker]="picker" (ngModelChange)="this.setMinDate()" >
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker disabled="false" #picker></mat-datepicker>
+            <mat-error *ngIf="this.projectForm.get('description').hasError('required')">
+              Data rozpoczecia projektu jest wymagana
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!--      End Date-->
+        <div>
+          <h4>Koniec prac*</h4>
+          <mat-form-field appearance="fill" title="Data zakończenia">
+            <input class="input-font" readonly matInput formControlName="endDate" autocomplete="off" [min]="minDate" [matDatepicker]="picker2" (ngModelChange)="this.setMaxDate()">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker disabled="false" #picker2></mat-datepicker>
+            <mat-error *ngIf="this.projectForm.get('description').hasError('required')">
+              Data zakończenia projektu jest wymagana
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+<!--      Status and Color-->
+      <div fxLayout="row" fxLayoutAlign="space-around">
+        <!--      Status-->
+        <div>
+          <h4>Status*</h4>
+          <mat-form-field appearance="fill" title="Status">
+            <mat-select class="input-font" formControlName="status">
+              <mat-option *ngFor="let status of this.allStatuses" value="{{status}}">{{status}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!--      Color-->
+        <div>
+          <h4>Kolor karty</h4>
+          <input readonly value="" class="color-picker" matInput formControlName="color" autocomplete="off" [style.background]="this.projectToEdit.color" [style.color]="this.projectToEdit.color"
+                 [(colorPicker)]="this.projectToEdit.color" (colorPickerChange)="this.projectForm.controls['color'].setValue(this.projectToEdit.color)">
+        </div>
+      </div>
+    </div>
+
+
+    <!--    Employees and Members-->
+    <h3>2. Uczestnicy projektu</h3>
+    <div class="employees-members-container" fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center" fxFlex="100%">
+      <!--        Available employees-->
+      <div class="employees-container" fxLayout="column">
+        <h3 class="employees-title">Dostępni pracownicy</h3>
+        <div class="single-employee" *ngFor="let employee of this.employees" fxLayout="row" fxLayoutGap="10px" fxLayoutAlign="space-between" (click)="this.addEmployeeToMembers(employee)">
+          <p class="font-p">{{employee.name}} {{employee.surname}}</p>
+          <p class="font-p">{{employee.current_avg_effectiveness}}</p>
+        </div>
+      </div>
+
+      <!--      Members in project-->
+      <div class="members-container" fxLayout="column">
+        <h3 class="employees-title">Pracownicy w zespole*</h3>
+        <div class="single-member" *ngFor="let member of this.members" fxLayout="row" fxLayoutAlign="space-between" (click)="this.removeMemberFromProject(member)">
+          <p class="font-p">{{member.name}} {{member.surname}}</p>
+          <p class="font-p">{{member.current_avg_effectiveness}}</p>
+        </div>
+      </div>
+    </div>
+
+    <!--    Add Project Button-->
+    <a matTooltip="Zapisz" style="margin-top: 40px" (click)="this.addProject()" *ngIf="this.isNewProject" fxLayoutAlign="center">
+      <div class="icon"
+         [hidden]="this.members.length === 0 || !this.projectForm.valid" >
+      <fa-icon class="edit-icon"  [icon]="addIcon" [size]="'4x'"></fa-icon>
+    </div>
+    </a>
+
+
+
+
+<!--    Tasks Container-->
+    <h3 *ngIf="!this.isNewProject" style="margin-top: 14px">3. Zadania i podzadania</h3>
+    <div fxLayout="row" *ngIf="!this.isNewProject && this.projectToEdit.tasks.length > 0">
+      <h4 style="margin-right: 190px">Opis zadania*</h4>
+      <h4 style="margin-right: 130px">Wykonawca zadania*</h4>
+      <h4>Status zadania*</h4>
+    </div>
+    <p style="text-align: center; font-size: 14px; color: #A7A7A7; font-style: italic"
+        *ngIf="(this.projectForm.get('tasks') === undefined || this.projectToEdit.tasks.length === 0) && !this.isNewProject">Brak zadań</p>
+    <div class="tasks-container" *ngIf="this.projectForm.get('tasks') !== undefined && !this.isNewProject">
+
+<!--      Task-->
+      <div class="single-task" formArrayName="tasks" *ngFor="let task of this.projectForm.get('tasks')['controls']; index as i">
+        <div [formGroupName]="i" class="custom-mat-expansion-panel mat-expansion-panel-padding-fixed">
+          <mat-expansion-panel [hideToggle]="true"
+                               [expanded]="this.expands[i]"
+                               [disabled]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <div fxLayout="column" fxLayoutAlign="center">
+                  <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="100px" class="no-underline-in-form-field" fxFlex="100%">
+
+  <!--                  Task description-->
+                    <mat-form-field appearance="standard">
+                      <input class="input-font-2" matInput formControlName="description" autocomplete="off"/>
+                    </mat-form-field>
+
+  <!--                  Task's member-->
+                    <mat-form-field appearance="standard" class="font-mat-select">
+                      <mat-select formControlName="memberId" >
+                        <mat-option *ngFor="let member of this.members" [value]="member.documentId">{{member.name}} {{member.surname}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+
+  <!--                  Task's Status-->
+                    <mat-form-field appearance="standard" class="font-mat-select">
+                      <mat-select formControlName="status">
+                        <mat-option [value]="'Aktywny'">Aktywne</mat-option>
+                        <mat-option [value]="'Zakończony'">Zakończone</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+<!--                  Buttons-->
+                  <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="36px">
+<!--                  Expand Task button-->
+                    <a *ngIf="task.get('subtasks')['controls'].length > 0" (click)="this.expands[i] = !this.expands[i]">
+                      <div class="icon">
+                        <fa-icon class="expand-icon" [icon]="expandIcon" [size]="'2x'"></fa-icon>
+                      </div>
+                    </a>
+
+<!--                  Edit Task button-->
+                    <a matTooltip="Zapisz zmiany" (click)="this.updateTask(task.get('documentId')['value'], i)" >
+<!--                      [disabled]="!task.valid || !task.touched">-->
+                      <div class="icon" style="width: 16px; height: 16px; margin-right: 14px"
+                           [hidden]="(!task.get('description').dirty && !task.get('status').dirty && !task.get('memberId').dirty) || !task.valid">
+                        <fa-icon class="edit-icon" [icon]="editIcon" [size]="'2x'"></fa-icon>
+                      </div>
+                    </a>
+
+<!--                  Delete Task button-->
+                    <a matTooltip="Usuń zadanie" (click)="this.deleteTask(task.get('documentId')['value'], i)">
+                      <div class="icon">
+                        <fa-icon class="delete-icon" [icon]="deleteIcon" [size]="'2x'"></fa-icon>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div fxLayout="row">
+              <h4 style="margin-right: 266px">Opis podzadania*</h4>
+              <h4>Status podzadania*</h4>
+            </div>
+
+<!--            Subtasks Container-->
+            <div class="subtasks-container" fxLayout="column">
+
+<!--                Subtask-->
+              <div class="single-subtask" fxLayout="row" fxLayoutAlign="space-between center" formArrayName="subtasks" *ngFor="let subtask of task.get('subtasks')['controls'], index as j" [ngClass]="j > 0 ?  'margin-top' : ''">
+                <div [formGroupName]="j" class="no-underline-in-form-field" fxLayout="row" fxLayoutGap="60px">
+
+<!--                  Subtask Description-->
+                  <div class="custom-mat-form-field">
+                    <mat-form-field appearance="fill">
+                      <textarea class="input-font-3 no-resize textarea-subtask" matInput formControlName="subtask_description"></textarea>
+                    </mat-form-field>
+                  </div>
+
+<!--                  Subtask Status-->
+                  <div class="fixed-padding-mat-form-field">
+                    <mat-form-field appearance="standard" class="font-mat-select-2 fixed-padding-mat-form-field">
+                      <mat-select formControlName="status">
+                        <mat-option [value]="'Aktywny'">Aktywne</mat-option>
+                        <mat-option [value]="'Zakończony'">Zakończone</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="16px">
+<!--                Edit Subtask button-->
+                  <a matTooltip="Zapisz zmiany" (click)="this.updateSubtask(task.get('documentId')['value'], i, subtask.get('documentId')['value'], j)">
+                    <div class="icon" style="width: 16px; height: 16px; margin-right: 22px"
+                         [hidden]="(!subtask.get('subtask_description').dirty && !subtask.get('status').dirty ) || !subtask.valid">
+                      <fa-icon class="edit-icon" [icon]="editIcon" [size]="'2x'"></fa-icon>
+                    </div>
+                  </a>
+<!--                Delete Subtask button-->
+                  <a matTooltip="Usuń podzadanie" (click)="this.deleteSubtask(task.get('documentId')['value'], i, subtask.get('documentId')['value'], j)">
+                    <div class="icon">
+                      <fa-icon class="delete-icon" [icon]="deleteIcon" [size]="'2x'"></fa-icon>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+
+
+<!--       New Task-->
+    <h3 *ngIf="!this.isNewProject" style="margin-top: 16px">4. Dodaj zadanie</h3>
+    <div fxLayout="row" *ngIf="!this.isNewProject">
+      <h4 style="margin-right: 135px">Opis zadania*</h4>
+      <h4 style="margin-right: 85px">Wykonawca zadania*</h4>
+      <h4>Status zadania*</h4>
+    </div>
+    <form [formGroup]="this.newTaskForm" *ngIf="!this.isNewProject" fxLayout="row" fxLayoutGap="30px">
+
+<!--           New Task Description-->
+      <mat-form-field appearance="fill" title="Opis Zadania">
+        <input class="input-font-2" matInput formControlName="description" autocomplete="off"/>
+        <mat-error *ngIf="this.newTaskForm.get('description').hasError('required')">
+          Opis zadania jest wymagany
+        </mat-error>
+      </mat-form-field>
+
+<!--        New Task's member-->
+      <mat-form-field appearance="fill">
+        <mat-select formControlName="memberId" class="input-font-2">
+          <mat-option *ngFor="let member of this.members" [value]="member.documentId">{{member.name}} {{member.surname}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="this.newTaskForm.get('memberId').hasError('required')">
+          Zadanie musi posiadać przypisanego wykonawcę
+        </mat-error>
+      </mat-form-field>
+
+<!--        New Task Status-->
+      <mat-form-field appearance="fill">
+        <mat-select  formControlName="status">
+          <mat-option [value]="'Aktywny'">Aktywne</mat-option>
+          <mat-option [value]="'Zakończony'">Zakończone</mat-option>
+        </mat-select>
+        <mat-error *ngIf="this.newTaskForm.get('status').hasError('required')">
+          Zadanie musi posiadać status
+        </mat-error>
+      </mat-form-field>
+
+      <a matTooltip="Dodaj zadanie" (click)="this.addTask()">
+        <div class="icon" style="margin-bottom: 16px; margin-left: 20px"
+             [hidden]="!this.newTaskForm.valid" >
+          <fa-icon disabled="" class="edit-icon" [icon]="addIcon" [size]="'3x'"></fa-icon>
+        </div>
+      </a>
+    </form>
+
+
+<!--       New Subtask-->
+    <h3 *ngIf="!this.isNewProject" style="margin-top: 16px">5. Dodaj podzadanie</h3>
+    <div fxLayout="row" *ngIf="!this.isNewProject">
+      <h4 style="margin-right: 155px">Opis podzadania*</h4>
+      <h4 style="margin-right: 125px">Przynależność*</h4>
+      <h4>Status podzadania*</h4>
+    </div>
+    <form [formGroup]="this.newSubtaskForm" (ngSubmit)="this.addSubtask()" *ngIf="!this.isNewProject" fxLayout="row" fxLayoutGap="30px">
+
+<!--         New Subtask Description-->
+      <div class="custom-mat-form-field-2">
+        <mat-form-field appearance="fill" title="Szczegóły projektu">
+          <textarea class="input-font-2 no-resize textarea-subtask" matInput formControlName="subtask_description"></textarea>
+          <mat-error *ngIf="this.newSubtaskForm.get('subtask_description').hasError('required')">
+            Opis podzadania jest wymagany
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+<!--        Subtask for which task-->
+      <mat-form-field appearance="fill" class="font-mat-select-1">
+        <mat-select formControlName="taskId">
+          <mat-option *ngFor="let task of this.projectToEdit.tasks" [value]="task.documentId">{{task.description}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="this.newSubtaskForm.get('taskId').hasError('required')">
+          Należy wskazać do jakiego zadania dodać to podzadanie
+        </mat-error>
+      </mat-form-field>
+
+<!--        New Subtask Status-->
+      <mat-form-field appearance="fill" class="font-mat-select-1">
+        <mat-select formControlName="status">
+          <mat-option [value]="'Aktywny'">Aktywne</mat-option>
+          <mat-option [value]="'Zakończony'">Zakończone</mat-option>
+        </mat-select>
+        <mat-error *ngIf="this.newSubtaskForm.get('status').hasError('required')">
+          Podzadanie musi posiadać status
+        </mat-error>
+      </mat-form-field>
+
+      <a matTooltip="Dodaj podzadanie" (click)="this.addSubtask()">
+        <div class="icon" style="margin-bottom: 16px; margin-left: 20px"
+             [hidden]="!this.newSubtaskForm.valid" >
+          <fa-icon class="edit-icon" [icon]="addIcon" [size]="'3x'"></fa-icon>
+        </div>
+      </a>
+    </form>
+  </form>
+</div>

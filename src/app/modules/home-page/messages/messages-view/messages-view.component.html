@@ -1,0 +1,32 @@
+<div class="container" fxLayout="row" fxLayoutGap="30px" fxFlexAlign="center center">
+  <mat-tab-group class="conversations-list-container">
+    <mat-tab label="Czat">
+      <div class="list">
+        <one-work-conversations-list [activeReceiverId]="this.receiverId" [ngStyle]="{'overflow-y': 'hidden'}" (receiver)="this.setReceiver($event)"></one-work-conversations-list>
+      </div>
+    </mat-tab>
+    <mat-tab label="Czat grupowy">
+      <div class="list">
+        <one-work-group-conversations-list (selectedGroup)="setGroup($event)" [ngStyle]="{'overflow-y': 'hidden'}"></one-work-group-conversations-list>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+  <div class="conversation-content">
+    <div style="height: 650px" *ngIf="this.showConversation">
+      <one-work-conversation-content [receiverDocumentId]="this.receiverId"></one-work-conversation-content>
+    </div>
+    <div style="height: 650px" *ngIf="this.showGroupConversations">
+      <one-work-group-conversation-content [selectedGroup]="this.selectedGroup"></one-work-group-conversation-content>
+    </div>
+    <form class="custom-form" [formGroup]="this.messageForm" (ngSubmit)="this.sendNewMessage()">
+      <mat-form-field class="form-field" appearance="outline">
+        <input matInput formControlName="content" autocomplete="off" placeholder="Napisz wiadomość..."/>
+      </mat-form-field>
+    </form>
+  </div>
+</div>
+
+
+
+

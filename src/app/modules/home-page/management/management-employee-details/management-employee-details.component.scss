@@ -1,0 +1,95 @@
+.container {
+  width: 100%;
+  height: auto;
+  padding: 20px 30px;
+  p {
+    padding: 0;
+    margin: 0;
+  }
+
+  .edit-icon {
+    color: rgba(210,210,210, 0.8);
+  }
+
+  .edit-icon:hover, .edit-icon:focus {
+    color: rgba(0,150,0, 0.8);
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .main-info {
+    .photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 100%;
+    }
+
+    p {
+      font-family: 'Nunito', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .internship {
+      font-style: italic;
+      color: #A0A0A0;
+      font-weight: 500;
+    }
+
+    .admin {
+      color: darkorange;
+      font-size: 14px;
+    }
+
+    .new {
+      color: #00B11A;
+      font-size: 14px;
+    }
+
+    .blocked {
+      color: red;
+      font-size: 14px;
+    }
+  }
+
+  form {
+    input {
+      font-size: 18px;
+      font-family: 'Nunito', sans-serif;
+    }
+  }
+
+  .employee-places {
+    .place-square {
+      width: 120px;
+      height: 120px;
+      border-radius: 16px;
+      box-shadow: 0 0 43px -18px rgba(0,0,0,0.76);
+      -webkit-box-shadow: 0 0 43px -18px rgba(0,0,0,0.76);
+      -moz-box-shadow: 0 0 43px -18px rgba(0,0,0,0.76);
+
+      .place-title {
+        font-family: 'Nunito', sans-serif;
+        font-size: 16px;
+        //font-style: italic;
+        //color: #A7A7A7;
+        padding-top: 10px;
+        font-weight: 700;
+      }
+
+      .place {
+        font-family: 'RocknRoll One', sans-serif;
+        color: #2474FF;
+        font-size: 40px;
+      }
+
+      .of-employees {
+        color: #A0A0A0;
+        font-size: 14px;
+        font-family: 'RocknRoll One', sans-serif;
+
+      }
+    }
+  }
+
+}

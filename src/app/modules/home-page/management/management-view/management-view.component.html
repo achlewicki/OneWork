@@ -1,0 +1,23 @@
+<div class="container" fxLayout="row wrap" fxLayoutAlign="center center" fxLayoutGap="50px">
+  <one-work-management-employees-list
+    (numberOfEmployees)="this.numberOfEmployees=$event"
+    (places)="this.places=$event"
+    (selectedEmployee)="this.setEmployee($event)"></one-work-management-employees-list>
+  <div class="details-container" fxLayout="column" fxLayoutAlign="start center">
+    <h2>Szczegóły</h2>
+    <one-work-management-employee-details
+      *ngIf="this.showData && this.selectedEmployee != undefined
+             && this.places != undefined && this.numberOfEmployees != undefined"
+      [places]="this.places"
+      [numberOfEmployees]="this.numberOfEmployees"
+      [employeeToManage]="this.selectedEmployee"></one-work-management-employee-details>
+  </div>
+
+  <div class="logs-container" fxLayout="column" fxLayoutAlign="start center">
+    <h2>Logi</h2>
+    <one-work-management-employee-logs *ngIf="this.showData && this.selectedEmployee != undefined"
+                                       [employeeId]="this.selectedEmployee.documentId"></one-work-management-employee-logs>
+  </div>
+
+</div>
+

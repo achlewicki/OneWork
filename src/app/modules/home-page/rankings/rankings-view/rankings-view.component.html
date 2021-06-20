@@ -1,0 +1,16 @@
+<div class="container" fxLayout="column" fxLayoutAlign="center center">
+  <div class="checkbox-container" fxLayout="column"  fxLayoutAlign="center center">
+    <h4 style="margin-bottom: 10px; margin-top: 0">Wyświetlam</h4>
+    <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center center">
+      <mat-checkbox color="primary" [checked]="true" [(ngModel)]="this.topRanking">Top Ranking</mat-checkbox>
+      <mat-checkbox color="primary" [(ngModel)]="this.effectivenessChart">Wykres skuteczności</mat-checkbox>
+      <mat-checkbox color="primary" [(ngModel)]="this.projectsChart">Wykres projektów</mat-checkbox>
+    </div>
+  </div>
+  <div fxLayout="column" fxLayoutGap="40px" fxLayoutAlign="center center">
+    <one-work-top-ranking *ngIf="this.topRanking"></one-work-top-ranking>
+    <one-work-effectiveness-chart [employees]="this.employees" *ngIf="this.effectivenessChart"></one-work-effectiveness-chart>
+    <one-work-projects-chart *ngIf="this.projectsChart"></one-work-projects-chart>
+  </div>
+</div>
+

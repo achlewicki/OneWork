@@ -1,0 +1,459 @@
+.container {
+  .edit-delete-buttons {
+    color: white;
+    font-weight: 600;
+    font-family: 'Arial', sans-serif;
+    width: 82%;
+
+
+    .return-button {
+      padding: 8px 10px;
+      border-radius: 30px;
+      width: 48px;
+      overflow-x: hidden;
+      background: rgba(210,210,210, 0.8);
+      transition: 1.2s;
+      cursor: pointer;
+
+      &:hover {
+        border-radius: 30px;
+        width: 114px;
+        transition: 1.2s;
+        background-color: #2474FF;
+      }
+    }
+
+    .edit-button {
+      padding: 10px 16px;
+      border-radius: 60px;
+      width: 58px;
+      overflow-x: hidden;
+      background: rgba(210,210,210, 0.8);
+      transition: 1.2s;
+      cursor: pointer;
+
+      &:hover {
+        border-radius: 30px;
+        width: 120px;
+        transition: 1.2s;
+        background-color: #2474FF;
+      }
+    }
+  }
+
+  margin-bottom: 40px;
+  p {
+    margin: 0;
+    padding: 0;
+  }
+  display: flex;
+  align-items: center;
+
+
+  .project-container {
+    width: auto;
+    height: auto;
+    border-radius: 12px;
+    align-items: flex-start;
+
+    .title {
+      text-align: center;
+      font-size: 24px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: bold;
+    }
+
+    .title-adds {
+      padding: 15px;
+    }
+
+    .custom-box-shadow {
+      box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+      border-radius: 12px;
+    }
+
+    .info {
+      font-size: 16px;
+      font-weight: bold;
+      font-style: italic;
+      font-family: 'Arial', sans-serif;
+      margin-top: 20px;
+      margin-bottom: 6px;
+      padding: 10px 0 10px 30px;
+      width: auto;
+      box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
+      border-radius: 12px;
+    }
+
+    .first {
+      margin-top: 0;
+    }
+
+    .details {
+      border-radius: 12px;
+      background-color: white;
+    }
+
+
+    .main-info-and-members-container {
+
+      .main-info {
+        width: 400px;
+        height: auto;
+        background-color: white;
+        padding: 0 20px 20px 20px;
+
+        .after-deadline, .before-deadline {
+          font-style: italic;
+          text-align: center;
+          font-size: 12px;
+          margin-top: 14px;
+        }
+
+        .after-deadline {
+          color: red;
+        }
+
+        .before-deadline {
+          color: #159B0B;
+        }
+
+        .finished-in {
+          font-style: italic;
+          font-size: 14px;
+          text-align: center;
+          margin: 10px 0;
+        }
+
+        .status-container {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          padding: 8px;
+
+
+          .status-icon {
+            border-radius: 100%;
+            width: 20px;
+            height: 20px;
+            box-shadow: rgba(0, 0, 0, 0.35) 0 5px 15px;
+          }
+        }
+
+        .project-title {
+          padding: 22px 10px;
+          margin: 0;
+          //border: solid yellow 2px;
+          text-align: center;
+          width: auto;
+          min-height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: 'Nunito', sans-serif;
+          font-size: 30px;
+          overflow-wrap: break-word;
+          font-weight: bold;
+        }
+
+
+        .project-description {
+          height: auto;
+          width: auto;
+          font-family: 'Arial', sans-serif;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: justify;
+          text-justify: inter-word;
+          padding: 0 10px;
+          line-height: 1.2;
+        }
+
+        .progress-bar-100 {
+          margin: 10px 40px 0 40px;
+          height: 20px;
+          line-height: 16px;
+          background-color: rgba(230,230,230,0.5);
+          border-radius: 20px;
+          box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+          width: auto;
+
+          .progress-bar-project {
+            content: '';
+            border-radius: 20px;
+            height: 20px;
+            line-height: 16px;
+            background-color: red;
+            transition: 2s;
+          }
+        }
+
+        .date-period {
+          justify-content: space-around;
+          font-family: 'Arial', sans-serif;
+          font-size: 16px;
+          padding: 0 10px;
+
+          .from-to {
+            font-size: 16px;
+            font-weight: bold;
+            font-style: italic;
+          }
+        }
+      }
+
+      .members-container {
+        padding: 20px 10px;
+        border-radius: 12px;
+
+
+
+        .link-to-conversation {
+          text-decoration: none;
+          cursor: pointer;
+
+          .avatar {
+            height: 50px;
+            width: 50px;
+            border-radius: 100%;
+            background-color: #159B0B;
+          }
+
+          .member-and-tasks {
+            font-size: 14px;
+            font-family: 'Arial', sans-serif;
+            padding: 7px;
+            .full-name {
+              color: black;
+            }
+
+            .finished-tasks {
+              color: #A7A7A7;
+              font-style: italic;
+            }
+          }
+
+          &:hover, &:active, &:visited {
+            color: black;
+          }
+        }
+      }
+    }
+
+    .tasks-container {
+      width: 800px;
+      min-height: 200px;
+      border-radius: 12px;
+      padding: 0 10px 10px 10px;
+
+      .tasks-title {
+        box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
+        font-size: 18px;
+        font-family: 'Nunito', sans-serif;
+        background-color: white;
+        border-top-right-radius: 12px;
+        border-top-left-radius: 12px;
+        margin-left: 20px;
+        padding: 6px 30px;
+        width: 160px;
+        margin-top: 20px;
+      }
+
+
+      .subtasks-container {
+        .margin-top {
+          margin-top: 12px;
+        }
+
+        .single-subtask {
+          display: flex;
+          flex-direction: row !important;
+          justify-content: space-between;
+          align-items: center;
+
+          .subtask-description {
+            width: 200px;
+            text-justify: inter-word;
+            text-overflow: ellipsis;
+            padding-left: 10px;
+          }
+        }
+      }
+
+    }
+
+    .annotation-and-files-container {
+      width: 400px;
+      height: auto;
+
+      .delete-icon {
+        color: rgba(210,210,210, 0.8);
+        cursor: pointer;
+        transition: 0.3s;
+        position: relative;
+        top: 10px;
+
+        &:hover, &:focus {
+          color: rgba(255,0,0,0.7);
+          transition: 0.3s;
+        }
+      }
+
+      .annotations-form-container {
+        max-height: 420px;
+        align-items: center;
+
+        .custom-form {
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+
+        .annotations-container {
+          overflow-y: scroll;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          align-items: center;
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          .annotation {
+            border-radius: 16px;
+            text-align: center;
+            text-overflow: ellipsis;
+            text-justify: inter-word;
+            padding: 15px 20px;
+            background-color: white;
+            margin: 4px 10px;
+            max-width: 280px;
+            transition: 0.3s;
+            cursor: pointer;
+            box-shadow: rgba(0, 0, 0, 0.1) 0 1px 3px 0, rgba(0, 0, 0, 0.06) 0 1px 2px 0;
+
+            &:hover{
+              background-color: #F5F5F5;
+              padding: 15px 40px;
+              transition: 0.3s;
+              cursor: default;
+              box-shadow: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
+            }
+          }
+        }
+
+      }
+
+      .files-container {
+        min-height: 200px;
+
+        .new-file-input-container {
+          position: relative;
+
+          &:hover > fa-icon {
+            transition: 0.4s;
+            color: #2474FF;
+            cursor: pointer;
+          }
+
+          fa-icon {
+            transition: 0.4s;
+            color: rgba(210,210,210, 0.8);
+
+          }
+
+          input {
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            z-index: 2;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+
+
+        .files {
+          margin: 10px;
+          padding: 10px;
+          border-radius: 12px;
+          background-color: white;
+          overflow-y: scroll;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          align-items: center;
+          max-height: 620px;
+          &::-webkit-scrollbar {
+            display: none;
+          }
+
+          .edit-input-container {
+            position: relative;
+            height: auto;
+            width: auto;
+
+
+            fa-icon {
+              transition: 0.4s;
+              color: rgba(210,210,210, 0.8);
+              cursor: pointer;
+            }
+
+            &:hover > fa-icon {
+              color: #FEFF3C;
+              transition: 0.4s;
+            }
+
+            input {
+              position: absolute;
+              left: 0;
+              right: 0;
+              margin-left: auto;
+              margin-right: auto;
+              z-index: 2;
+              opacity: 0;
+              width: 100%;
+              height: 100%;
+
+              &:hover {
+                cursor: pointer;
+              }
+            }
+          }
+
+          .download-icon {
+            color: #A0A0A0;
+            transition: 0.4s;
+            &:hover {
+              transition: 0.4s;
+              color: #159B0B;
+            }
+          }
+
+          .delete-icon {
+            top: 0;
+          }
+
+          .file-details {
+            overflow-x: hidden;
+            width: 230px;
+            p {
+              margin: 0;
+              padding: 0;
+              font-family: 'Nunito', sans-serif;
+              font-size: 12px;
+              font-style: italic;
+            }
+          }
+        }
+      }
+    }
+  }
+}

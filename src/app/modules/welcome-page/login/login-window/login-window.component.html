@@ -1,0 +1,35 @@
+<div class="grid">
+  <div fxLayout="row wrap" fxLayoutAlign="center" class="container">
+    <div class="label" fxLayoutAlign="center center" fxLayout="column" fxFlex="100%" fxLayoutGap="20px">
+      <img class="logo" src="assets/logo.png" alt="OneWorkLogo">
+      <p class="label-text">Logowanie</p>
+    </div>
+    <form [formGroup]="loginForm" (ngSubmit)="submitEvent()"  fxLayout="column" fxLayoutAlign="center" >
+
+      <!---- Email ----->
+      <mat-form-field appearance="outline" fxFlex="80%">
+        <mat-label>Email*</mat-label>
+        <input matInput formControlName="email" placeholder="Email"/>
+        <mat-error *ngIf="this.loginForm.get('email').hasError('required')">
+          Email jest wymagany.
+        </mat-error>
+
+      </mat-form-field>
+
+      <!---- Password ----->
+      <mat-form-field appearance="outline" fxFlex="80%">
+        <mat-label>Hasło*</mat-label>
+        <input matInput [type]="'password'" formControlName="password" placeholder="Hasło" />
+        <mat-error *ngIf="this.loginForm.get('password').hasError('required')">
+          Hasło jest wymagane.
+        </mat-error>
+      </mat-form-field>
+
+      <div class="custom-button-wrapper" style="margin-bottom: 20px">
+        <button  class="custom-button" type="submit">Zaloguj</button>
+      </div>
+
+      <mat-error *ngIf="this.errorInfo.length > 0" style="text-align: center; margin-bottom: 10px">{{this.errorInfo}}</mat-error>
+    </form>
+  </div>
+</div>

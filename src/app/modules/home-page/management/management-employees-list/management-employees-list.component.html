@@ -1,0 +1,37 @@
+<div class="container" fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="start">
+  <h2 style="text-align: center">Lista pracowników</h2>
+  <mat-form-field appearance="standard">
+    <label>
+      <input matInput placeholder="Wyszukaj pracownika..."
+             [formControl]="this.employeesControl"
+            autocomplete="off"/>
+    </label>
+  </mat-form-field>
+  <div class="employees-list" fxLayout="column" fxLayoutGap="5px">
+    <div class="single-employee"
+         fxLayout="row"
+         fxLayoutGap="10px"
+         fxLayoutAlign="start"
+         [ngClass]="this.selectedEmployee != undefined && this.activeId === employee.documentId ? 'active' : 'inactive'"
+         *ngFor="let employee of employees"
+         (click)="this.onSelectEmployee(employee)">
+      <ng-container *ngIf="isContaing(employee.name + ' ' + employee.surname)">
+        <img class="photo" *ngIf="employee.photoUrl != undefined" [src]="employee.photoUrl" alt="photo">
+        <div fxLayout="column" fxLayoutAlign="center" class="details-container">
+          <p class="name-surname">{{employee.name}} {{employee.surname}}</p>
+          <div fxLayout="row">
+            <p class="tagged admin" *ngIf="employee.administrator">Admin</p>
+            <p class="tagged new" *ngIf="employee.new">Nowy</p>
+            <p class="tagged blocked" *ngIf="!employee.valid">Zablokowany</p>
+          </div>
+          <p class="employed-since">Pracownik od {{employee.employed_since.toDate() | date : 'dd MMMM yyyy'}}</p>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <div class="custom-button-wrapper">
+    <button class="custom-button" (click)="this.setPlacesForEmployees()">Aktualizacja rankingu</button>
+  </div>
+</div>

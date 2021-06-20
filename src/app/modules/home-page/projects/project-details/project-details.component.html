@@ -1,0 +1,252 @@
+<div class="container" fxLayout="column" fxLayoutGap="30px" fxFlexAlign="center center" *ngIf="this.project != undefined">
+  <div class="edit-delete-buttons" fxLayout="row" fxLayoutAlign="space-between center">
+    <a (click)="this.details.emit(false)">
+      <div class="return-button" fxLayout="row" fxLayoutAlign="space-between center">
+        <fa-icon [icon]="returnIcon" [size]="'2x'"></fa-icon>
+        <p style="margin-left: 12px">Powrót</p>
+      </div>
+    </a>
+    <a (click)="this.openEditProjectDialog()" *ngIf="this.sharedData.employeeDetails.administrator">
+      <div class="edit-button" fxLayout="row" fxLayoutAlign="space-between center">
+        <fa-icon [icon]="editIcon" [size]="'2x'"></fa-icon>
+        <p style="margin-left: 12px">Edytuj</p>
+      </div>
+    </a>
+  </div>
+  <div class="project-container" fxLayout="row wrap" fxLayoutGap="40px" *ngIf="this.project != undefined">
+    <div class="main-info-and-members-container" fxLayout="column" fxLayoutGap="40px">
+      <div style="background-color: white; border-radius: 12px">
+        <div class="main-info custom-box-shadow" fxLayout="column" #mainInfo>
+          <p class="project-title">{{project.title}}</p>
+          <div class="details">
+            <p class="info first">Szczegóły</p>
+            <p class="project-description">{{project.description}}</p>
+            <p class="info">Obecny postęp</p>
+            <div class="progress-bar-100" *ngIf="project != undefined && project.tasks != undefined">
+              <div class="progress-bar-project"
+                   [ngStyle]="{'width': this.setProgressBarWidth() , 'background-color': project.color}">
+              </div>
+            </div>
+            <p class="finished-in" *ngIf="project.tasks.length > 0">Ukończono w {{this.calculatePercentage()}} ({{this.totalFinishedTasks}}/{{project.tasks.length}} zadań)</p>
+            <p class="info">Okres prac</p>
+            <div class="date-period" fxLayout="row">
+              <div fxLayout="column">
+                <p class="from-to">Od</p>
+                <p class="date">{{project.start_date.toDate() | date: 'EEEE, dd.MM.yyyy'}}</p>
+              </div>
+              <div fxLayout="column">
+                <p class="from-to">Do</p>
+                <p class="date">{{project.end_date.toDate() | date: 'EEEE, dd.MM.yyyy'}}</p>
+              </div>
+            </div>
+            <p class="after-deadline" *ngIf="project.status === 'Aktywny' && project.end_date.seconds <= this.todayDate.seconds">
+              Deadline przekroczony o {{this.calculateDeadlineDays(this.todayDate.seconds - project.end_date.seconds)}}!!!
+            </p>
+            <p class="before-deadline" *ngIf="project.status === 'Aktywny' && project.end_date.seconds > this.todayDate.seconds">
+              Deadline mija za {{this.calculateDeadlineDays( project.end_date.seconds - this.todayDate.seconds)}}
+            </p>
+            <p class="info">Status</p>
+            <div class="status-container" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="20px">
+              <div class="status-icon" [ngStyle]="{'background-color': (project.status === 'Aktywny' ? 'green' :
+                (project.status === 'Zakończony' ? 'black' : (project.status === 'Anulowany' ? 'red' : 'blue')))}">
+              </div>
+              <p class="status-content" [ngStyle]="{'color': (project.status === 'Aktywny' ? 'green' :
+                (project.status === 'Zakończony' ? 'black' : (project.status === 'Anulowany' ? 'red' : 'blue')))}">{{project.status}}</p>
+            </div>
+            {{this.setGradient(mainInfo)}}
+          </div>
+
+        </div>
+      </div>
+
+      <div style="background-color: white; border-radius: 12px">
+        <div class="members-container custom-box-shadow" fxLayout="column" fxLayoutGap="10px" #members>
+          <p class="title">Uczestnicy</p>
+          <a class="link-to-conversation" (click)=this.sharedData.setReceiver(member.documentId)
+             [ngStyle]="{'cursor': 'text'}"
+             [routerLink]="['/home/messages']"
+             *ngFor="let member of project.members"
+             fxLayout="row wrap">
+            <img class="avatar" alt="photo" [src]="member.photoUrl || ''">
+            <div class="member-and-tasks" fxLayout="column">
+              <p class="full-name">{{member.name}} {{member.surname}}</p>
+              <p class="finished-tasks">{{this.countTasksForMember(member)}} ukończonych zadań</p>
+            </div>
+          </a>
+          {{this.setGradient(members, mainInfo)}}
+        </div>
+      </div>
+    </div>
+
+    <div style="background-color: white; border-radius: 12px">
+      <div class="tasks-container custom-box-shadow" fxLayout="column" *ngIf="this.project.tasks != undefined  && this.project != undefined " #tasks>
+        <p class="title title-adds">Zadania</p>
+        <p class="tasks-title" *ngIf="this.doesEmployeeBelongsToProject()">Twoje Zadania</p>
+        <mat-expansion-panel expanded="true" *ngIf="this.doesEmployeeBelongsToProject()"
+                             [hideToggle]="this.countTasksForMember(this.sharedData.employeeDetails, 'all') === '0'"
+                             [disabled]="this.countTasksForMember(this.sharedData.employeeDetails, 'all') === '0'">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Liczba zadań do wykonania: {{this.countTasksForMember(this.sharedData.employeeDetails, 'all')}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-container *ngFor="let task of this.project.tasks, index as i">
+            <mat-expansion-panel *ngIf="task.member.documentId === this.sharedData.employeeDetails.documentId && task.subtasks != undefined"
+                                 [hideToggle]="task.subtasks.length === 0"
+                                 [disabled]="task.subtasks.length === 0"
+                                  class="custom-mat-expansion-panel">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <div fxFlex="row" fxLayoutAlign="space-between">
+                    <p>{{task.description}}</p>
+                    <mat-slide-toggle *ngIf="task.subtasks.length === 0"
+                                      [disabled]="task.status === 'Zakończony' || this.project.status !== 'Aktywny'"
+                                      [checked]="task.status === 'Zakończony'"
+                                      (change)="this.setTasksStatusChanged($event, task.documentId)"></mat-slide-toggle>
+                    <div *ngIf="task.subtasks.length > 0">
+                      <mat-panel-description >
+                        Dostępne podzadania
+                      </mat-panel-description>
+                    </div>
+                  </div>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="subtasks-container" *ngIf="task.subtasks.length > 0">
+                <div class="single-subtask" *ngFor="let subtask of task.subtasks, index as i" [ngClass]="i > 0 ?  'margin-top' : ''">
+                  <p class="subtask-description">{{subtask.subtask_description}}</p>
+                  <p class="status">{{subtask.status === 'Aktywny' ? 'Aktywne' : 'Zakończone'}}</p>
+                  <mat-slide-toggle  [disabled]="subtask.status === 'Zakończony' || this.project.status !== 'Aktywny'"
+                                     [checked]="subtask.status === 'Zakończony'"
+                                     (change)="this.setSubtasksStatusChanged($event, task.documentId, subtask.documentId)"></mat-slide-toggle>
+                </div>
+              </div>
+<!--              <hr>-->
+            </mat-expansion-panel>
+          </ng-container>
+          <div fxLayout="column" fxLayoutAlign="center center">
+            <div class="custom-button-wrapper">
+              <button (click)="this.confirmChanges()" class="custom-button"
+                      *ngIf="this.tasksStatusChanged.length > 0 || (this.subtasksStatusChanged != undefined && this.subtasksStatusChanged.length > 0)">
+                Zatwierdź zmiany
+              </button>
+            </div>
+            <p *ngIf="this.tasksStatusChanged.length != 0">Zmiany dla zadań: </p>
+            <p *ngFor="let task of this.tasksStatusChanged">{{this.showDescriptionOfChangedTask(task)}} </p>
+
+            <p *ngIf="this.subtasksStatusChanged != undefined && this.subtasksStatusChanged.length != 0">Zmiany dla podzadań: </p>
+            <div *ngFor="let task of this.subtasksStatusChanged">
+              <p *ngFor="let subtask of task.subtasksIds"> {{this.showDescriptionOfChangedSubtask(task.taskId, subtask)}}</p>
+            </div>
+          </div>
+
+        </mat-expansion-panel>
+
+
+        <ng-container *ngFor="let member of this.project.members">
+          <p *ngIf="member.documentId != this.sharedData.employeeDetails.documentId" class="tasks-title">{{member.name}} {{member.surname}}</p>
+          <mat-expansion-panel *ngIf="member.documentId != this.sharedData.employeeDetails.documentId"
+                               [hideToggle]="this.countTasksForMember(member, 'all') === '0'"
+                               [disabled]="this.countTasksForMember(member, 'all') === '0'">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Liczba zadań do wykonania: {{this.countTasksForMember(member, 'all')}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="no-box-shadow" *ngFor="let task of this.project.tasks">
+              <mat-expansion-panel *ngIf="task.member.documentId === member.documentId && task.subtasks != undefined"
+                                   [hideToggle]="task.subtasks.length === 0"
+                                   [disabled]="task.subtasks.length === 0"
+                                   class="custom-mat-expansion-panel">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <div fxFlex="row" fxLayoutAlign="space-between">
+                      <p>{{task.description}}</p>
+                      <mat-slide-toggle *ngIf="task.subtasks.length === 0"
+                                        [disabled]="true"
+                                        [checked]="task.status === 'Zakończony'"></mat-slide-toggle>
+                      <div *ngIf="task.subtasks.length > 0">
+                        <mat-panel-description >
+                          Dostępne podzadania
+                        </mat-panel-description>
+                      </div>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="subtasks-container" *ngIf="task.subtasks.length > 0">
+                  <div class="single-subtask" *ngFor="let subtask of task.subtasks, index as i" [ngClass]="i > 0 ?  'margin-top' : ''">
+                    <p class="subtask-description">{{subtask.subtask_description}}</p>
+                    <p class="status">{{subtask.status === 'Aktywny' ? 'Aktywne' : 'Zakończone'}}</p>
+                    <mat-slide-toggle  [disabled]="true"
+                                       [checked]="subtask.status === 'Zakończony'"></mat-slide-toggle>
+                  </div>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </mat-expansion-panel>
+        </ng-container>
+
+        {{this.setGradient(tasks)}}
+      </div>
+    </div>
+
+    <div class="annotation-and-files-container" fxLayout="column" fxLayoutGap="40px">
+      <div style="background-color: white; border-radius: 12px">
+        <div class="annotations-form-container custom-box-shadow" fxLayout="column" #annotations>
+          <p class="title title-adds">Adnotacje</p>
+          <div class="annotations-container" fxLayout="column" *ngIf="this.project != undefined">
+            <p *ngIf="this.project.annotations.length === 0" class="no-data">Brak Adnotacji</p>
+            <div class="annotation" *ngFor="let annotation of this.project.annotations">
+              <p  matTooltip="{{annotation.member.name}}  {{annotation.member.surname}} o {{annotation.date.toDate() | date : 'HH:mm:ss \'w\' EEEE d.LL.yyyy'}}">
+                {{annotation.description}}
+              </p>
+                <a matTooltip="Usuń" (click)="this.deleteAnnotation(annotation.documentId)"
+                   *ngIf="this.annotation.memberId === this.sharedData.employeeDetails.documentId && this.doesEmployeeBelongsToProject()">
+                  <div>
+                    <fa-icon class="delete-icon" [size]="'1x'" [icon]="deleteIcon"></fa-icon>
+                  </div>
+                </a>
+            </div>
+          </div>
+          <form class="custom-form" [formGroup]="this.annotationForm" (ngSubmit)="this.setNewAnnotation()">
+            <mat-form-field class="annotation-form-field" appearance="outline">
+              <input matInput formControlName="description" placeholder="Napisz nową adnotację..."/>
+            </mat-form-field>
+          </form>
+          {{this.setGradient(annotations)}}
+        </div>
+      </div>
+
+      <div style="background-color: white; border-radius: 12px">
+        <div class="files-container custom-box-shadow" fxLayout="column" fxLayoutAlign="center center" #files>
+          <p class="title title-adds">Pliki</p>
+          <div class="files" fxLayout="column" fxLayoutAlign="start" fxLayoutGap="14px" *ngIf="this.projectFiles != undefined">
+            <div *ngFor="let singleFile of this.projectFiles; index as i" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+              <a [href]="singleFile.downloadUrl" download matTooltip="Pobierz">
+                <fa-icon class="download-icon" [icon]="this.establishIconForFile(singleFile.metadata.contentType, singleFile.metadata.name)" [size]="'3x'"></fa-icon>
+              </a>
+              <div class="file-details" fxLayout="column" fxLayoutGap="2px">
+                <p>Nazwa pliku: {{singleFile.metadata.name}}</p>
+                <p>Autor: {{this.establishAuthorForFile(singleFile.metadata)}}</p>
+                <p>Zmodyfikowano: {{this.parseDate(singleFile.metadata.updated) | date : 'd.LL.yyyy HH:mm:ss'}}</p>
+              </div>
+              <div class="edit-input-container" *ngIf="singleFile.metadata.customMetadata !== undefined && singleFile.metadata.customMetadata.createdBy === this.sharedData.employeeDetails.documentId">
+                <fa-icon class="edit-icon" [size]="'2x'" [icon]="editIcon"></fa-icon>
+                <input matTooltip="Edytuj plik" type="file" (change)="this.editFile($event, i)" />
+              </div>
+              <a (click)="this.deleteFile(i)" *ngIf="singleFile.metadata.customMetadata !== undefined && singleFile.metadata.customMetadata.createdBy === this.sharedData.employeeDetails.documentId">
+                <fa-icon class="delete-icon" matTooltip="Usuń plik" [size]="'2x'" [icon]="deleteIcon"></fa-icon>
+              </a>
+            </div>
+          </div>
+
+          <div class="new-file-input-container">
+            <fa-icon class="upload-icon" [size]="'3x'" [icon]="uploadIcon"></fa-icon>
+            <input type="file" matTooltip="Dodaj nowy plik" (change)="this.addFile($event)" />
+          </div>
+
+          {{this.setGradient(files, annotations)}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

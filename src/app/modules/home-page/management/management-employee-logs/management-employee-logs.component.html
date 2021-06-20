@@ -1,0 +1,28 @@
+<div class="container" fxLayout="column" fxLayoutGap="10px">
+  <div class="logs">
+    <div fxLayout="column" fxLayoutAlign="start center" *ngFor="let log of this.logsData; index as i">
+      <div class="date-titles-divider" fxLayout="column"  fxLayoutAlign="center center" *ngIf="i == 0 || this.isItAnotherDay(log.log_in, this.logsData[i-1].log_in)">
+        <p class="date">{{log.log_in.toDate() | date : 'dd LLL yyyy'}}</p>
+        <div class="titles" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
+          <p class="log-in title">Zalogowano</p>
+          <p class="log-out title">Wylogowano</p>
+          <p class="send title">Wysłano</p>
+          <p class="no-answers title">Nieopowiedziano</p>
+          <p class="percentage title">Procent</p>
+          <p class="average-time title">Średni czas</p>
+        </div>
+      </div>
+      <div class="single-log" [ngClass]="i % 2 ? 'even' : 'odd'" fxLayout="row" fxLayoutAlign="center" fxLayoutGap="16px">
+        <p class="log-in element">{{log.log_in.toDate() | date : 'HH:mm:ss'}}</p>
+        <p class="log-out element">{{log.log_in.toDate().getSeconds() === log.log_out.toDate().getSeconds() && i === 0 ? 'obecnie' : (log.log_out.toDate() | date : 'HH:mm:ss')}}</p>
+        <p class="send element">{{log.sent_queries}}</p>
+        <p class="no-answers element">{{log.no_answers_total}}</p>
+        <p class="percentage element">{{this.calculatePercentage(log.sent_queries, log.no_answers_total)}}</p>
+        <p class="average-time element">{{this.convertSecondsToMinutes(log.average_interval_time)}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="custom-button-wrapper">
+    <button class="custom-button" (click)="this.loadLogs(true)">Pobierz więcej</button>
+  </div>
+</div>
